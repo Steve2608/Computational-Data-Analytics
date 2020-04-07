@@ -1,0 +1,7 @@
+# IntelliJ config
+.idea/
+*.iml
+out/
+
+# data for learners
+data/
