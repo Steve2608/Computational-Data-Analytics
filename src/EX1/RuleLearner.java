@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 public class RuleLearner {
 
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		final Set<String> files = getFileNames();
-		for (String file : files) {
+		for (final String file : files) {
 			System.out.println("Processing " + file);
 			final Instances data = loadDataset(file);
 
@@ -35,13 +35,13 @@ public class RuleLearner {
 
 	}
 
-	private static ConjunctiveRule getConjunctiveRule(Instances data) throws Exception {
+	private static ConjunctiveRule getConjunctiveRule(final Instances data) throws Exception {
 		final ConjunctiveRule rule = new ConjunctiveRule();
 		rule.buildClassifier(data);
 		return rule;
 	}
 
-	private static Instances loadDataset(String path) throws Exception {
+	private static Instances loadDataset(final String path) throws Exception {
 		final Instances data = DataSource.read(path);
 		if (data.classIndex() == -1) data.setClassIndex(data.numAttributes() - 1);
 		return data;
@@ -54,7 +54,7 @@ public class RuleLearner {
 		return ripper;
 	}
 
-	private static int numberOfRules(JRip ripper) {
+	private static int numberOfRules(final JRip ripper) {
 		return ripper.getRuleset().size();
 	}
 
