@@ -36,8 +36,7 @@ public class CrossValidation {
 			System.out.println(HEADER);
 			System.out.println("Performing Cross Validation on Dataset" + data.relationName() + "Samples: " + data.size());
 			final TTS tts = trainValSplit(data);
-			// TODO tts.train.size()
-			final int[] cvParams = {5, 10, 20, 50};
+			final int[] cvParams = {5, 10, 20, 50};// TODO tts.train.size()
 			for (final int folds : cvParams)
 				accs.add(getCVAcc(tts, folds));
 
