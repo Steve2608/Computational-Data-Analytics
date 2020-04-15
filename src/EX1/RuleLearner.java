@@ -3,21 +3,22 @@ package EX1;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.rules.ConjunctiveRule;
 import weka.classifiers.rules.JRip;
-import weka.core.Attribute;
 import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
+
+import static util.Util.*;
 
 public class RuleLearner {
 
 	public static void main(final String[] args) throws Exception {
-		final Set<String> files = getFileNames();
-		final StringBuilder result = new StringBuilder(String.format("%-15s\t %-11s\t %-10s\t %-10s\n", "Dataset", "JRip", "JRip noPruning", "ConjunctiveRule"));
+		final Set<String> files = getFileNames("data");
+		final StringBuilder result = new StringBuilder(String.format("%-45s\t %-11s\t %-10s\t %-10s\n", "Dataset", "JRip", "JRip noPruning", "ConjunctiveRule"));
 		final int[] totalRanks = {0, 0, 0};
 
 		for (final String file : files) {
@@ -55,7 +56,7 @@ public class RuleLearner {
 			final List<Integer> ranks = accs.stream()
 					                            .map(e -> sorted.indexOf(e) + 1)
 					                            .collect(Collectors.toList());
-			result.append(String.format("%-15s\t %f (%d)\t %f (%d)\t %f (%d)\n", data.relationName(),
+			result.append(String.format("%-45s\t %f (%d)\t %f (%d)\t %f (%d)\n", data.relationName(),
 					accs.get(0), ranks.get(0), accs.get(1), ranks.get(1), accs.get(2), ranks.get(2)));
 			totalRanks[0] += ranks.get(0);
 			totalRanks[1] += ranks.get(1);
@@ -66,7 +67,7 @@ public class RuleLearner {
 		final double n = files.size();
 		final double[] avgRanks = {totalRanks[0] / n, totalRanks[1] / n, totalRanks[2] / n};
 		result.append("-------------------------------------------------------------------\n");
-		result.append(String.format("%-15s\t %f \t\t %f \t\t %f\n", "AVG RANK",
+		result.append(String.format("%-45s\t %f \t\t %f \t\t %f\n", "AVG RANK",
 				avgRanks[0], avgRanks[1], avgRanks[2]));
 		System.out.println(result);
 
@@ -102,47 +103,6 @@ public class RuleLearner {
 			System.out.println(String.format("χ²(0.95;2) = %f >= %f = χ²F", chi2, chi2F));
 			System.out.println("Null hypotheses could NOT be rejected with p = 0.95!");
 		}
-	}
-
-	private static ConjunctiveRule getConjunctiveRule(final Instances data) throws Exception {
-		final ConjunctiveRule rule = new ConjunctiveRule();
-		rule.buildClassifier(data);
-		return rule;
-	}
-
-	private static Instances loadDataset(final String path) throws Exception {
-		final Instances data = DataSource.read(path);
-
-		// For some Datasets the class attribute is not the last one, and for some it's not called 'class'
-		if (data.classIndex() == -1) {
-			Attribute attClass = data.attribute("class");
-			if (attClass == null) {
-				attClass = data.attribute("Class");
-			}
-			if (attClass != null) {
-				data.setClassIndex(attClass.index());
-			} else {
-				data.setClassIndex(data.numAttributes() - 1);
-			}
-		}
-		return data;
-	}
-
-	private static JRip getRipper(final Instances data, final boolean usePruning) throws Exception {
-		final JRip ripper = new JRip();
-		ripper.setUsePruning(usePruning);
-		ripper.buildClassifier(data);
-		return ripper;
-	}
-
-	private static Set<String> getFileNames() {
-		return Arrays.stream(
-				Objects.requireNonNull(Path.of("data")
-						                       .toFile()
-						                       .listFiles())
-		).map(File::getAbsolutePath)
-				       .filter(fileName -> fileName.endsWith(".arff"))
-				       .collect(Collectors.toSet());
 	}
 
 }
