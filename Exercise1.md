@@ -62,7 +62,31 @@ hypothyroid     99,443266 (1)   99,178155 (2)   97,083775 (3)
 AVG RANK        1,500000        1,400000        2,800000
 </pre>
 
-*Java Code:*
+<pre>
+Perform the Friedman statistics test:
+E.g. k = 3, N = 10
+Chi²F = 12N / k(k+1)  *  ( SUM(avgRanks²) - k(k+1)² / 4 )
+Chi²F = 12*10 / 3*4  *  ( SUM(avgRanks²) - 3*4 / 4 )
+Sum(avgRanks²) = 12,050000 (from table above)
+Chi²F = 8.0
+Chi²(0.95,2) = 5.991   -> see https://people.richland.edu/james/lecture/m170/tbl-chi.html
+
+χ²(0.95;2) = 5,991000 < 8,000000 = χ²F
+Null hypotheses successfully rejected with p = 0.95!
+</pre>
+
+<pre>
+Perform the Nemenyi post-hoc test: 
+(which can be performed because the null hypothesis of the Friedman is rejected)
+q_alpha_0.05_#c3 = 2.343
+Critical Distance between pairs of avgRanks:
+CD = q_alpha * Math.sqrt(k * (k + 1) / (6 * n))
+CD = 1,047821
+</pre>
+
+With a CD of ~1.05 we can show that both JRip Classifiers are significantly better than ConjunctiveRule. As 2.8 > 1.5 + 1.05 (or 1.04). However JRip with pruning is NOT significant better than JRip without pruning.
+
+*Java Code, which we used to calculate the Friedman statistics and CD:*
 ```java
 private static void performFriedmanNemenyiTests(final double[] avgRanks, final double n) {
   System.out.println("Perform the Friedman statistics test:");
@@ -86,26 +110,3 @@ private static void performFriedmanNemenyiTests(final double[] avgRanks, final d
   }
 }
 ```
-
-<pre>
-E.g. k = 3, N = 10
-Chi²F = 12N / k(k+1)  *  ( SUM(avgRanks²) - k(k+1)² / 4 )
-Chi²F = 12*10 / 3*4  *  ( SUM(avgRanks²) - 3*4 / 4 )
-Chi²F = 8.0
-Chi²(0.95,2) = 5.991   -> see https://people.richland.edu/james/lecture/m170/tbl-chi.html
-</pre>
-
-*Output:*
-<pre>
-Perform the Friedman statistics test:
-Sum(avgRanks²) = 12,050000
-χ²(0.95;2) = 5,991000 < 8,000000 = χ²F
-Null hypotheses successfully rejected with p = 0.95!
-</pre>
-
-<pre>
-Perform the Nemenyi post-hoc test: 
-(which can be performed because the null hypothesis of the Friedman is rejected)
-q_alpha_0.05_#c3 = 2.343
-CD = 1,047821
-</pre>
