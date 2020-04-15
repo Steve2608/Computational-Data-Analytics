@@ -18,6 +18,9 @@ public class CrossValidation {
 	private static final int N_DATA_SETS = 5;
 	private static final String HEADER = "###########################################################";
 
+	private CrossValidation() {
+	}
+
 	public static void main(final String[] args) throws Exception {
 		// Load 5 datasets
 		final List<Instances> datasets = fetchBiggestDatasets(DATA_PATH, N_DATA_SETS);
