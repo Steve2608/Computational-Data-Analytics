@@ -3,15 +3,15 @@ package EX1;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.rules.ConjunctiveRule;
 import weka.classifiers.rules.JRip;
-import weka.core.Attribute;
 import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
+
+import static util.Util.loadDataset;
 
 public class RuleLearner {
 
@@ -108,24 +108,6 @@ public class RuleLearner {
 		final ConjunctiveRule rule = new ConjunctiveRule();
 		rule.buildClassifier(data);
 		return rule;
-	}
-
-	private static Instances loadDataset(final String path) throws Exception {
-		final Instances data = DataSource.read(path);
-
-		// For some Datasets the class attribute is not the last one, and for some it's not called 'class'
-		if (data.classIndex() == -1) {
-			Attribute attClass = data.attribute("class");
-			if (attClass == null) {
-				attClass = data.attribute("Class");
-			}
-			if (attClass != null) {
-				data.setClassIndex(attClass.index());
-			} else {
-				data.setClassIndex(data.numAttributes() - 1);
-			}
-		}
-		return data;
 	}
 
 	private static JRip getRipper(final Instances data, final boolean usePruning) throws Exception {
