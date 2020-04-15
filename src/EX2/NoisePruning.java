@@ -5,7 +5,6 @@ import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.filters.unsupervised.attribute.AddNoise;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -111,26 +110,6 @@ public class NoisePruning {
 			return search(data, true);
 		}
 
-		@Override
-		public boolean equals(final Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
-
-			final J48GridSearcher that = (J48GridSearcher) o;
-
-			if (!Arrays.equals(minNumObj, that.minNumObj)) return false;
-			return Arrays.equals(confidenceFactor, that.confidenceFactor);
-		}
-
-		@Override
-		public int hashCode() {
-			return 31 * Arrays.hashCode(minNumObj) + Arrays.hashCode(confidenceFactor);
-		}
-
-		@Override
-		public String toString() {
-			return "J48GridSearcher{minNumObj=" + Arrays.toString(minNumObj) + ", confidenceFactor=" + Arrays.toString(confidenceFactor) + "}";
-		}
 	}
 
 }
