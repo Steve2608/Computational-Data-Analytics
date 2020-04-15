@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 public class Util {
 
+	public static final String DATA_PATH = "data";
+
 	public static Instances loadDataset(final String path) throws Exception {
 		final Instances data = ConverterUtils.DataSource.read(path);
 
