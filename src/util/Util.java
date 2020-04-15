@@ -75,12 +75,9 @@ public class Util {
 		return cvModel(clf, data, 10);
 	}
 
-	public static J48 getJ48(final Instances data) throws Exception {
-		return getJ48(data, 0.25f);
-	}
-
-	public static J48 getJ48(final Instances data, final float confidenceFactor) throws Exception {
+	public static J48 getJ48(final Instances data, final int minNumObj, final float confidenceFactor) throws Exception {
 		final J48 tree = new J48();
+		tree.setMinNumObj(minNumObj);
 		tree.setConfidenceFactor(confidenceFactor);
 		tree.buildClassifier(data);
 		return tree;
