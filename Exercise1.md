@@ -62,20 +62,50 @@ hypothyroid     99,443266 (1)   99,178155 (2)   97,083775 (3)
 AVG RANK        1,500000        1,400000        2,800000
 </pre>
 
+*Java Code:*
+```java
+private static void performFriedmanNemenyiTests(final double[] avgRanks, final double n) {
+  System.out.println("Perform the Friedman statistics test:");
+  final double k = avgRanks.length;
+  final double sumAvgRanks2 = DoubleStream.of(avgRanks).map(a -> a * a).sum();
+  System.out.println(String.format("Sum(avgRanks²) = %f", sumAvgRanks2));
+  final double chi2F = 12 * n / k * (k + 1) * (sumAvgRanks2 - k * (k + 1) * (k + 1) / 4);
+  final double chi2 = 5.991; // Chi²(0.95,k-1)
+  if (chi2 < chi2F) {
+    System.out.println(String.format("χ²(0.95;2) = %f < %f = χ²F", chi2, chi2F));
+    System.out.println("Null hypotheses successfully rejected with p = 0.95!");
+
+    System.out.println("Perform the Nemenyi post-hoc test: (which can be performed because the null hypothesis of the Friedman is rejected)");
+    System.out.println("q_alpha_0.05_#c3 = 2.343 ");
+    final double q_alpha = 2.343;
+    final double CD = q_alpha * Math.sqrt(k * (k + 1) / (6 * n)); // Critical Distance between pairs of avgRanks
+    System.out.println(String.format("CD = %f", CD));
+  } else {
+    System.out.println(String.format("χ²(0.95;2) = %f >= %f = χ²F", chi2, chi2F));
+    System.out.println("Null hypotheses could NOT be rejected with p = 0.95!");
+  }
+}
+```
+
 <pre>
-Perform the Friedman statistics test:
 E.g. k = 3, N = 10
 Chi²F = 12N / k(k+1)  *  ( SUM(avgRanks²) - k(k+1)² / 4 )
 Chi²F = 12*10 / 3*4  *  ( SUM(avgRanks²) - 3*4 / 4 )
 Chi²F = 8.0
 Chi²(0.95,2) = 5.991   -> see https://people.richland.edu/james/lecture/m170/tbl-chi.html
+</pre>
 
+*Output:*
+<pre>
+Perform the Friedman statistics test:
+Sum(avgRanks²) = 12,050000
 χ²(0.95;2) = 5,991000 < 8,000000 = χ²F
 Null hypotheses successfully rejected with p = 0.95!
 </pre>
 
 <pre>
-Perform the Nemenyi post-hoc test: (which can be performed because the null hypothesis of the Friedman is rejected)
+Perform the Nemenyi post-hoc test: 
+(which can be performed because the null hypothesis of the Friedman is rejected)
 q_alpha_0.05_#c3 = 2.343
 CD = 1,047821
 </pre>
