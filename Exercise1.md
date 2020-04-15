@@ -17,6 +17,23 @@ Deadline: May 3, 23:59
 
 > *In this exercise you will compare JRip, JRip without pruning (by setting usePruning=False) and ConjunctiveRule on different datasets. Therefore, choose ten datasets and try to have as much variance in the number of instances, the number of attributes and the attribute data types as possible.*
 
+**Datasets:**
+
+| Dataset | # Instances | # Attributes¹ | # Continuous¹ | # Discrete | # Classes |
+| ------- |------------ | ------------- | ------------- | ---------- | --------- |
+| hypothyroid | 3772 | 29 | 7 | 22 | 4 |
+| car | 1728 | 6 | 0 | 6 | 4 |
+| contact-lenses | 24 | 4 | 0 | 4 | 3 |
+| iris | 150 | 4 | 4 | 0 | 3 |
+| vote | 435 | 16 | 0 | 16 (all boolean) | 2 |
+| wine | 178 | 13 | 13 | 0 | 3 |
+| breast-cancer | 286 | 10 | 0 | 10 | 2 |
+| diabetes | 768 | 8 | 8 | 0 | 2 |
+| labor | 75 | 16 | 8 | 8 | 2 |
+| credit-g | 1000 | 21 | 7 | 13 | 2 |
+
+***¹**Without Class Attribute*
+
 > *1. Compare the number of rules, conditions and predicted classes of the resulting rule sets with respect to:*
 > - *the datasets*
 > - *the rule classifiers*
