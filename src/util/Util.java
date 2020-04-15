@@ -1,5 +1,7 @@
 package util;
 
+import weka.classifiers.Classifier;
+import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.rules.ConjunctiveRule;
 import weka.classifiers.rules.JRip;
 import weka.core.Attribute;
@@ -10,12 +12,17 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Util {
 
+	private static final int SEED = 0;
 	public static final String DATA_PATH = "data";
+
+	private Util() {
+	}
 
 	public static Instances loadDataset(final String path) throws Exception {
 		final Instances data = ConverterUtils.DataSource.read(path);
@@ -56,6 +63,16 @@ public class Util {
 		ripper.setUsePruning(usePruning);
 		ripper.buildClassifier(data);
 		return ripper;
+	}
+
+	public static Evaluation cvModel(final Classifier clf, final Instances data, final int folds) throws Exception {
+		final Evaluation eval = new Evaluation(data);
+		eval.crossValidateModel(clf, data, folds, new Random(SEED));
+		return eval;
+	}
+
+	public static Evaluation cvModel(final Classifier clf, final Instances data) throws Exception {
+		return cvModel(clf, data, 10);
 	}
 
 }

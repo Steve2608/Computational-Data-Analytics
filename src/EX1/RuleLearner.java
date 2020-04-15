@@ -7,7 +7,6 @@ import weka.core.Instances;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -16,38 +15,39 @@ import static util.Util.*;
 
 public class RuleLearner {
 
-    public static void main(final String[] args) throws Exception {
-        final Set<String> files = getFileNames(DATA_PATH);
-        final StringBuilder result = new StringBuilder(String.format("%-45s\t %-11s\t %-10s\t %-10s\n", "Dataset", "JRip", "JRip noPruning", "ConjunctiveRule"));
-        final int[] totalRanks = {0, 0, 0};
+	private static final String HEADER = "###########################################################";
+
+	private RuleLearner() {
+	}
+
+	public static void main(final String[] args) throws Exception {
+		final Set<String> files = getFileNames(DATA_PATH);
+		final StringBuilder result = new StringBuilder(String.format("%-45s\t %-11s\t %-10s\t %-10s\n", "Dataset", "JRip", "JRip noPruning", "ConjunctiveRule"));
+		final int[] totalRanks = {0, 0, 0};
 
 		for (final String file : files) {
-
-			System.out.println("###########################################################");
+			System.out.println(HEADER);
 			System.out.println("Processing " + file);
-			System.out.println("###########################################################");
+			System.out.println(HEADER);
 			final Instances data = loadDataset(file);
 
 			final JRip pruning = getRipper(data, true);
-			final Evaluation evalPruning = new Evaluation(data);
-			evalPruning.crossValidateModel(pruning, data, 10, new Random(0));
+			final Evaluation evalPruning = cvModel(pruning, data);
 			System.out.println(pruning);
 			System.out.println(evalPruning.pctCorrect());
-			System.out.println("###########################################################");
+			System.out.println(HEADER);
 
 			final JRip noPruning = getRipper(data, false);
-			final Evaluation evalNoPruning = new Evaluation(data);
-			evalNoPruning.crossValidateModel(noPruning, data, 10, new Random(0));
+			final Evaluation evalNoPruning = cvModel(noPruning, data);
 			System.out.println(noPruning);
 			System.out.println(evalNoPruning.pctCorrect());
-			System.out.println("###########################################################");
+			System.out.println(HEADER);
 
 			final ConjunctiveRule rule = getConjunctiveRule(data);
-			final Evaluation evalRule = new Evaluation(data);
-			evalRule.crossValidateModel(rule, data, 10, new Random(0));
+			final Evaluation evalRule = cvModel(rule, data);
 			System.out.println(rule);
 			System.out.println(evalRule.pctCorrect());
-			System.out.println("###########################################################");
+			System.out.println(HEADER);
 
 			final List<Double> accs = List.of(evalPruning.pctCorrect(), evalNoPruning.pctCorrect(), evalRule.pctCorrect());
 			final List<Double> sorted = accs.stream()
