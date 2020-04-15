@@ -15,12 +15,12 @@ import static util.Util.cvModel;
 public class CrossValidation {
 
 	private static final long SEED = 0L;
-	private static final int N_DS = 5;
+	private static final int N_DATA_SETS = 5;
 	private static final String HEADER = "###########################################################";
 
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		// Load 5 datasets
-		final List<Instances> datasets = fetchBiggestDatasets(DATA_PATH, N_DS);
+		final List<Instances> datasets = fetchBiggestDatasets(DATA_PATH, N_DATA_SETS);
 		System.out.println(HEADER);
 		System.out.println("Selected the following datasets: ");
 		datasets.forEach(data -> System.out.println("Dataset" + data.relationName() + "Samples: " + data.size()));
@@ -29,16 +29,17 @@ public class CrossValidation {
 		final StringBuilder sb = new StringBuilder(String.format("%-45s %15s %15s %15s %15s %15s %15s %15s %15s\n",
 				"Dataset", "1x5 CV", "1x10 CV", "1x20 CV", "LOOCV", "Self", "10x10 CV", "5x2 CV", "Validation"));
 
-		final HashMap<String, List<Double>> resultMap = new HashMap<>(N_DS);
+		final HashMap<String, List<Double>> resultMap = new HashMap<>(N_DATA_SETS);
 
 		for (final Instances data : datasets) {
 			final ArrayList<Double> accs = new ArrayList<>();
 			System.out.println(HEADER);
 			System.out.println("Performing Cross Validation on Dataset" + data.relationName() + "Samples: " + data.size());
-			final TTS tts = trainValSplit(data, SEED);
-			final int[] cvParams = {5, 10, 20, 50}; // TODO tts.train.size()
-			for (int folds : cvParams)
-				accs.add(getCVAcc(tts, folds, SEED));
+			final TTS tts = trainValSplit(data);
+			// TODO tts.train.size()
+			final int[] cvParams = {5, 10, 20, 50};
+			for (final int folds : cvParams)
+				accs.add(getCVAcc(tts, folds));
 
 			accs.add(evalOnTrainSet(tts.train));
 
@@ -60,44 +61,38 @@ public class CrossValidation {
 			System.out.println();
 		}
 		System.out.println(sb.toString());
-
 	}
 
 	private static List<Instances> fetchBiggestDatasets(final String rootPath, final int nSets) {
 		return Util.getFileNames(rootPath).stream().map(path -> {
 			try {
 				return Util.loadDataset(path);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 				return null;
 			}
-		}).sorted(Comparator.comparingInt(Instances::size)
-				.reversed())
-				.limit(nSets)
-				.collect(Collectors.toList());
+		}).sorted(Comparator.comparingInt((Instances inst) -> Objects.requireNonNull(inst).size()).reversed())
+				       .limit(nSets)
+				       .collect(Collectors.toList());
 	}
 
-	private static TTS trainValSplit(final Instances data, final long seed) throws Exception {
-		StratifiedRemoveFolds srf = new StratifiedRemoveFolds();
-		srf.setSeed(seed);
-		srf.setNumFolds(2);
-		srf.setFold(1);
-		srf.setInvertSelection(false);
-		srf.setInputFormat(data);
-		final Instances train = StratifiedRemoveFolds.useFilter(data, srf);
-		srf.setFold(2);
-		final Instances test = StratifiedRemoveFolds.useFilter(data, srf);
-		return new TTS(train, test);
+	private static TTS trainValSplit(final Instances data) throws Exception {
+		final StratifiableFolds sf = new StratifiableFolds(data, 2, SEED);
+		return new TTS(sf.getFold(1), sf.getFold(2));
 	}
 
-	private static double getCVAcc(final TTS tts, final int folds, final Long seed) throws Exception {
+	private static double getCVAcc(final TTS tts, final int folds, final long seed) throws Exception {
 		System.out.println("Performing " + folds + "-fold CV");
 		final JRip ripper = new JRip();
 		ripper.setSeed(seed);
 		final Evaluation eval = cvModel(ripper, tts.train, folds);
-		double acc = eval.pctCorrect();
+		final double acc = eval.pctCorrect();
 		System.out.println(acc);
 		return acc;
+	}
+
+	private static double getCVAcc(final TTS tts, final int folds) throws Exception {
+		return getCVAcc(tts, folds, SEED);
 	}
 
 	private static double evalOnTrainSet(final Instances train) throws Exception {
@@ -107,7 +102,7 @@ public class CrossValidation {
 		ripper.buildClassifier(train);
 		final Evaluation eval = new Evaluation(train);
 		eval.evaluateModel(ripper, train);
-		double acc = eval.pctCorrect();
+		final double acc = eval.pctCorrect();
 		System.out.println(acc);
 		return acc;
 	}
@@ -139,17 +134,37 @@ public class CrossValidation {
 		private final Instances train;
 		private final Instances test;
 
-		public TTS(Instances train, Instances test) {
-			this.train = train;
-			this.test = test;
+		private TTS(final Instances train, final Instances test) {
+			this.train = Objects.requireNonNull(train);
+			this.test = Objects.requireNonNull(test);
 		}
 
-		public Instances getTest() {
+		private Instances getTest() {
 			return test;
 		}
 
-		public Instances getTrain() {
+		private Instances getTrain() {
 			return train;
+		}
+	}
+
+	private static class StratifiableFolds extends StratifiedRemoveFolds {
+
+		private final Instances data;
+
+		private StratifiableFolds(final Instances data, final int nFolds, final long seed) throws Exception {
+			this.data = Objects.requireNonNull(data);
+			setNumFolds(nFolds);
+			setSeed(seed);
+			setInvertSelection(false);
+			setInputFormat(this.data);
+		}
+
+		private Instances getFold(final int fold) throws Exception {
+			if (fold <= 0 || fold > getNumFolds())
+				throw new IllegalArgumentException(String.valueOf(fold));
+			setFold(fold);
+			return useFilter(data, this);
 		}
 	}
 
