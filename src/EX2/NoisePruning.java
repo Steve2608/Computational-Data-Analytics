@@ -32,10 +32,12 @@ public class NoisePruning {
 			printTreeStats(treeParam, cvModel(treeParam, data));
 
 			// parametrized trees with different confidence Factors
+			// TODO cross val
 			final J48[] trees = new J48[]{
-					getJ48(data),
-					getJ48(data, 0.1f),
-					getJ48(data, 0.5f)
+					getJ48(data, 1, 0.25f),
+					getJ48(data, 1, 0.10f),
+					getJ48(data, 1, 0.50f),
+					getJ48(data, 3, 0.25f),
 			};
 			// cross validation
 			for (final J48 tree : trees) {
