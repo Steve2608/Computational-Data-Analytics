@@ -1,11 +1,14 @@
 package EX3;
 
 import util.Util;
+import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.rules.JRip;
 import weka.core.Instances;
 import weka.filters.supervised.instance.StratifiedRemoveFolds;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,6 +20,7 @@ public class CrossValidation {
 	private static final long SEED = 0L;
 	private static final int N_DATA_SETS = 5;
 	private static final String HEADER = "###########################################################";
+	private static final String logfile = "log.txt";
 
 	private CrossValidation() {
 	}
@@ -39,7 +43,7 @@ public class CrossValidation {
 			System.out.println(HEADER);
 			System.out.println("Performing Cross Validation on Dataset" + data.relationName() + "Samples: " + data.size());
 			final TTS tts = trainValSplit(data);
-			final int[] cvParams = {5, 10, 20, 50};// TODO tts.train.size()
+			final int[] cvParams = {5, 10, 20, tts.train.size()};
 			for (final int folds : cvParams)
 				accs.add(getCVAcc(tts, folds));
 
@@ -63,6 +67,17 @@ public class CrossValidation {
 			System.out.println();
 		}
 		System.out.println(sb.toString());
+
+		System.out.println(HEADER);
+		Files.writeString(Paths.get(logfile), sb.toString());
+	}
+
+	private static double getROC(final Classifier clf, final Instances data) throws Exception {
+		clf.buildClassifier(data);
+		Evaluation eval = new Evaluation(data);
+		final double[] preds = eval.evaluateModel(clf, data);
+		final double auc = eval.areaUnderROC(data.numAttributes() - 1);
+		return auc;
 	}
 
 	private static List<Instances> fetchBiggestDatasets(final String rootPath, final int nSets) {
@@ -74,8 +89,8 @@ public class CrossValidation {
 				return null;
 			}
 		}).sorted(Comparator.comparingInt((Instances inst) -> Objects.requireNonNull(inst).size()).reversed())
-				       .limit(nSets)
-				       .collect(Collectors.toList());
+				.limit(nSets)
+				.collect(Collectors.toList());
 	}
 
 	private static TTS trainValSplit(final Instances data) throws Exception {
@@ -83,10 +98,11 @@ public class CrossValidation {
 		return new TTS(sf.getFold(1), sf.getFold(2));
 	}
 
-	private static double getCVAcc(final TTS tts, final int folds, final long seed) throws Exception {
+
+	private static double getCVAcc(final TTS tts, final int folds, final Long clf_seed) throws Exception {
 		System.out.println("Performing " + folds + "-fold CV");
 		final JRip ripper = new JRip();
-		ripper.setSeed(seed);
+		ripper.setSeed(clf_seed);
 		final Evaluation eval = cvModel(ripper, tts.train, folds);
 		final double acc = eval.pctCorrect();
 		System.out.println(acc);
