@@ -4,6 +4,7 @@ import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.rules.ConjunctiveRule;
 import weka.classifiers.rules.JRip;
+import weka.classifiers.trees.J48;
 import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
@@ -73,6 +74,25 @@ public class Util {
 
 	public static Evaluation cvModel(final Classifier clf, final Instances data) throws Exception {
 		return cvModel(clf, data, 10);
+	}
+
+	public static J48 getJ48(final Instances data) throws Exception {
+		return getJ48(data, 0.25f);
+	}
+
+	public static J48 getJ48(final Instances data, final float confidenceFactor) throws Exception {
+		final J48 tree = new J48();
+		tree.setConfidenceFactor(confidenceFactor);
+		tree.buildClassifier(data);
+		return tree;
+	}
+
+	public static J48 getJ48Param(final Instances data) throws Exception {
+		final J48 tree = new J48();
+		tree.setUnpruned(true);
+		tree.setMinNumObj(1);
+		tree.buildClassifier(data);
+		return tree;
 	}
 
 }
