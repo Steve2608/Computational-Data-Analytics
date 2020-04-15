@@ -45,3 +45,37 @@ Deadline: May 3, 23:59
 > *3. On the basis of the previous subtasks, can you make a statement which of the datasets is the easiest or best to learn?*
 
 > *4. Perform a Friedman-Nemenyi test on the results and check whether there is a significant difference between the performance of the classifiers.*
+
+<pre>
+Dataset         JRip            JRip noPruning  ConjunctiveRule
+labor-neg-data  85,964912 (2)   89,473684 (1)   75,438596 (3)
+iris            93,333333 (1)   93,333333 (1)   66,666667 (3)
+vote            95,172414 (2)   95,172414 (2)   95,402299 (1)
+wine            89,887640 (2)   91,573034 (1)   63,483146 (3)
+pima_diabetes   75,651042 (1)   72,265625 (2)   69,401042 (3)
+breast-cancer   73,426573 (1)   73,426573 (1)   71,678322 (3)
+german_credit   71,500000 (2)   72,900000 (1)   70,000000 (3)
+car             86,111111 (2)   88,194444 (1)   70,023148 (3)
+contact-lenses  79,166667 (1)   70,833333 (2)   54,166667 (3)
+hypothyroid     99,443266 (1)   99,178155 (2)   97,083775 (3)
+---------------------------------------------------------------
+AVG RANK        1,500000        1,400000        2,800000
+</pre>
+
+<pre>
+Perform the Friedman statistics test:
+E.g. k = 3, N = 10
+Chi²F = 12N / k(k+1)  *  ( SUM(avgRanks²) - k(k+1)² / 4 )
+Chi²F = 12*10 / 3*4  *  ( SUM(avgRanks²) - 3*4 / 4 )
+Chi²F = 8.0
+Chi²(0.95,2) = 5.991   -> see https://people.richland.edu/james/lecture/m170/tbl-chi.html
+
+χ²(0.95;2) = 5,991000 < 8,000000 = χ²F
+Null hypotheses successfully rejected with p = 0.95!
+</pre>
+
+<pre>
+Perform the Nemenyi post-hoc test: (which can be performed because the null hypothesis of the Friedman is rejected)
+q_alpha_0.05_#c3 = 2.343
+CD = 1,047821
+</pre>
