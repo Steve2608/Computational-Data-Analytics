@@ -138,14 +138,6 @@ public class CrossValidation {
 			this.train = Objects.requireNonNull(train);
 			this.test = Objects.requireNonNull(test);
 		}
-
-		private Instances getTest() {
-			return test;
-		}
-
-		private Instances getTrain() {
-			return train;
-		}
 	}
 
 	private static class StratifiableFolds extends StratifiedRemoveFolds {
