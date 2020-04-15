@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class Util {
 
 	private static final int SEED = 0;
+	public static final String DATA_PATH = "data";
 
 	private Util() {
 	}

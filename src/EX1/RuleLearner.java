@@ -21,7 +21,7 @@ public class RuleLearner {
 	}
 
 	public static void main(final String[] args) throws Exception {
-		final Set<String> files = getFileNames("data");
+		final Set<String> files = getFileNames(DATA_PATH);
 		final StringBuilder result = new StringBuilder(String.format("%-45s\t %-11s\t %-10s\t %-10s\n", "Dataset", "JRip", "JRip noPruning", "ConjunctiveRule"));
 		final int[] totalRanks = {0, 0, 0};
 
