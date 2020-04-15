@@ -84,7 +84,8 @@ public class RuleLearner {
 		final double k = avgRanks.length;
 		final double sumAvgRanks2 = DoubleStream.of(avgRanks).map(a -> a * a).sum();
 		final double chi2F = 12 * n / k * (k + 1) * (sumAvgRanks2 - k * (k + 1) * (k + 1) / 4);
-		final double chi2 = 5.991; // Todo: create lookup Chi²(0.95,k-1)
+		// TODO: create lookup Chi²(0.95,k-1)
+		final double chi2 = 5.991;
 		if (chi2 < chi2F) {
 			System.out.println(String.format("χ²(0.95;2) = %f < %f = χ²F", chi2, chi2F));
 			System.out.println("Null hypotheses successfully rejected with p = 0.95!");
@@ -92,10 +93,11 @@ public class RuleLearner {
 			System.out.println("Perform the Nemenyi post-hoc test:");
 			// Perform the Nemenyi post-hoc test (which can be performed if the null hypothesis of the Friedman is rejected)
 			// q_alpha_0.05_#c3 = 2.343
-			final double q_alpha = 2.343; // Todo: lookup q_alpha for p and k
+			// TODO: lookup q_alpha for p and k
+			final double q_alpha = 2.343;
 			final double CD = q_alpha * Math.sqrt(k * (k + 1) / (6 * n)); // Critical Distance between pairs of avgRanks
+			// TODO: compare avgRanks all pairs of classifiers and check significant difference by CriticalDistance CD
 			System.out.println(String.format("CD = %f", CD));
-			// Todo: compare avgRanks all pairs of classifiers and check significant difference by CriticalDistance CD
 		} else {
 			System.out.println(String.format("χ²(0.95;2) = %f >= %f = χ²F", chi2, chi2F));
 			System.out.println("Null hypotheses could NOT be rejected with p = 0.95!");
