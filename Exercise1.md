@@ -34,6 +34,51 @@ Deadline: May 3, 23:59
 
 ***¹**Without Class Attribute*
 
+**Sample output for labor.arff:**
+<pre>
+JRIP rules:
+===========
+
+(wage-increase-first-year <= 2.5) => class=bad (15.0/2.0)
+(statutory-holidays <= 10) and (wage-increase-first-year <= 4) => class=bad (5.0/0.0)
+(longterm-disability-assistance = no) => class=bad (2.0/0.0)
+ => class=good (35.0/0.0)
+
+Number of Rules : 4
+
+Accuracy= 85,965
+
+###########################################################
+
+JRIP rules no Pruning:
+===========
+
+(wage-increase-first-year <= 2.8) and (working-hours >= 37) => class=bad (13.0/0.0)
+(pension = none) => class=bad (5.0/0.0)
+(longterm-disability-assistance = no) => class=bad (2.0/0.0)
+ => class=good (37.0/0.0)
+
+Number of Rules : 4
+
+Accuracy= 89,474
+
+###########################################################
+
+Single conjunctive rule learner:
+--------------------------------
+(wage-increase-first-year <= 2.9) => class = bad
+
+Class distributions:
+Covered by the rule:
+bad	good	
+0.909091	0.090909	
+
+Not covered by the rule:
+bad	good	
+0.148148	0.851852	
+Accuracy= 75,439
+</pre>
+
 > *1. Compare the number of rules, conditions and predicted classes of the resulting rule sets with respect to:*
 > - *the datasets*
 > - *the rule classifiers*
@@ -52,28 +97,83 @@ Deadline: May 3, 23:59
 | contact-lenses  | 3               | 4               | 1               |
 | hypothyroid     | 5               | 11              | 1               |
 
-**Average number of Conditions er Classifier and Dataset (including default rule):**
+ConjunctiveRule always contains 1 Rule, as expected. JRip wihout pruning always uses more rules than with pruning, as expected. However, for the wine dataset the noPruning option results in only 4 instead of 5 rules, wich is odd!
+
+All datasets result in only 3-5 rules with JRip and pruning, even for 'big' datasets like *hypothyroid* or *credit*. However, except for *car* where about 100 and after pruning about 50! rules are used, which is a lot considering that the *car* dataset has only 6 attributes. 
+
+**Average number of Conditions per Classifier and Dataset (including default rule):**
 | Dataset         | JRip            | JRip noPruning  | ConjunctiveRule |
 | --------------- | --------------- | --------------- | --------------- |
 | labor-neg-data  | 1,00            | 1,00            | 1               |
-| iris            | 1,33            | 1,33            | 1               |
-| vote            | 1,50            | 1,50            | 1               |
-| wine            | 1,40            | 1,40            | 2               |
-| pima_diabetes   | 2,25            | 2,25            | 1               |
-| breast-cancer   | 1,33            | 1,33            | 0               |
-| german_credit   | 1,67            | 1,67            | 0               |
-| car             | 3,98            | 3,98            | 0               |
-| contact-lenses  | 1,00            | 1,00            | 0               |
-| hypothyroid     | 2,20            | 2,20            | 3               |
+| iris            | 1,33            | 2,20            | 1               |
+| vote            | 1,50            | 3,70            | 1               |
+| wine            | 1,40            | 1,50            | 2               |
+| pima_diabetes   | 2,25            | 5,18            | 1               |
+| breast-cancer   | 1,33            | 3,20            | 0               |
+| german_credit   | 1,67            | 4,15            | 0               |
+| car             | 3,98            | 4,53            | 0               |
+| contact-lenses  | 1,00            | 2,00            | 0               |
+| hypothyroid     | 2,20            | 3,45            | 3               |
+
+We see that JRip without pruning also results in a lot more conditions per rule on average. ConjunctiveRule usually uses only 1 condition or even non at all (resulting in a simple default rule).
+
+The *car* dataset also leads to a lot of conditions per rule, which again is a lot considering that the *car* dataset has only 6 attributes. 
+
+Interestingly, the *german_credit* dataset which has 21 attributes leads to only 3 rules with on average 1.67 conditions after pruning.
+
+**Number of Rules predicting certain Classes per Classifier and Dataset:**
+| Dataset         | JRip            | JRip noPruning  | ConjunctiveRule |
+| --------------- | --------------- | --------------- | --------------- |
+| labor-neg-data  | bad=3, good=1   | bad=3, good=1   |  bad=1          |
+| iris            | Iris-versicolor=1, Iris-virginica=1, Iris-setosa=1 | Iris-versicolor=3, Iris-virginica=1, Iris-setosa=1 |  Iris-setosa=1  |
+| vote            | democrat=1, republican=3 | democrat=1, republican=9 |  republican=1   |
+| wine            | 1=2, 2=1, 3=2   | 1=2, 2=1, 3=1   |  1=1            |
+| pima_diabetes   | tested_positive=3, tested_negative=1 | tested_positive=10, tested_negative=1 |  tested_negative=1 |
+| breast-cancer   | recurrence-events=2, no-recurrence-events=1 | recurrence-events=4, no-recurrence-events=1 |  no-recurrence-events=1 |
+| german_credit   | bad=2, good=1   | bad=12, good=1  |  good=1         |
+| car             | acc=28, good=11, vgood=9, unacc=1 | acc=64, good=15, vgood=17, unacc=1 |  unacc=1        |
+| contact-lenses  | hard=1, none=1, soft=1 | hard=1, none=1, soft=2 |  none=1         |
+| hypothyroid     | negative=1, primary_hypothyroid=3, compensated_hypothyroid=1 | negative=1, primary_hypothyroid=5, compensated_hypothyroid=5 |  compensated_hypothyroid=1 |
+
+We can see that for binary class problems usually only one class is used for the rules and the remaining one is handled by the default rule. 
 
 > *2. Is there a default rule for all algorithms? If so:*
 > - *Which class is usually chosen as default rule?*
 > - *How do you interpret the quality of the default rule?*
 
+**Default Rules per Classifier and Dataset:**
+| Dataset         | JRip            | JRip noPruning  | ConjunctiveRule      |
+| --------------- | --------------- | --------------- | --------------- |
+| labor-neg-data  |  => class=good (35.0/0.0) |  => class=good (37.0/0.0) | -                    |
+| iris            |  => class=Iris-virginica (50.0/0.0) |  => class=Iris-virginica (50.0/0.0) | -                    |
+| vote            |  => Class=democrat (262.0/5.0) |  => Class=democrat (270.0/5.0) | -                    |
+| wine            |  => class=2 (58.0/1.0) |  => class=2 (57.0/0.0) | -                    |
+| pima_diabetes   |  => class=tested_negative (545.0/102.0) |  => class=tested_negative (610.0/110.0) | -                    |
+| breast-cancer   |  => Class=no-recurrence-events (245.0/55.0) |  => Class=no-recurrence-events (261.0/60.0) | Rule is default ( => Class = no-recurrence-events) |
+| german_credit   |  => class=good (767.0/162.0) |  => class=good (878.0/178.0) | Rule is default ( => class = good) |
+| car             |  => class=unacc (4.0/0.0) |  => class=unacc (6.0/0.0) | Rule is default ( => class = unacc) |
+| contact-lenses  |  => contact-lenses=none (6.0/1.0) |  => contact-lenses=none (3.0/0.0) | Rule is default ( => contact-lenses = none) |
+| hypothyroid     |  => Class=negative (92.0/5.0) |  => Class=negative (79.0/0.0) | -                    |
+
+JRip always (at least for our datasets) creates a DefaultRule. ConjunctiveRule creates per Definition only 1 Rule - howerever an implicit default rule is used at classification, when for instances not covered by the Rule the most prominent class not covered will be used. The explicit default Rules are always the same for all classifiers.
+
+The quality of the default rules is usually pretty good on the training set, with a homogeneous set of instances covered. However, for the datasets diabetes, breast-cancer and german_credit the default rule is pretty heterogenic with about 20% missclassification.
+
+Interestingly, for a view datasets the single ConjunctiveRule results in a explicit default rule with no rule body. The accuracy (see below) however is not drastically better than for JRip, indicating that there is really hard to learn a meaningful rule for this datasets.
+
 > *3. On the basis of the previous subtasks, can you make a statement which of the datasets is the easiest or best to learn?*
+
+When only looking at the learned rules and not on the performance/accuracy it is hard to judge the datasets. A low number of short rules can indicate a simple dataset, however, in the extreme case it can also indicate an hard dataset where no rule could be found.
+
+The *iris*, *labor*, and *contact-lenses* datasets result in very few and very simple rules for all three classifiers and homogeneous default rules indicating easy to learn datasets. However, when looking at the accaracy this is clearly not true for *contact-lenses*.
+
+The big *hypothyroid* or *german_credit* datasets also result in relatively few rules, especially after pruning, indicating good learnability, which however is not true for *german_credit* when looking at the true accuracy.
+
+When looking at the accuracy with 10-Fold CV (see below) we can clearly see that *hypothyroid* or *vote* are the easiest datasets, as even the Sinlge Conjunctive Rule gets >97% and >95% accuracy for those.
 
 > *4. Perform a Friedman-Nemenyi test on the results and check whether there is a significant difference between the performance of the classifiers.*
 
+**Accuracies and Ranks for the different Datasets and Classifiers (10-Fold CV):**
 <pre>
 Dataset         JRip            JRip noPruning  ConjunctiveRule
 labor-neg-data  85,964912 (2)   89,473684 (1)   75,438596 (3)

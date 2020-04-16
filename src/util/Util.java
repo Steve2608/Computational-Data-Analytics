@@ -53,8 +53,15 @@ public class Util {
 				       .collect(Collectors.toSet());
 	}
 
-	public static ConjunctiveRule getConjunctiveRule(final Instances data) throws Exception {
-		final ConjunctiveRule rule = new ConjunctiveRule();
+	// WEKEA - WHY YOU NOT PROVIDE THIS!!!!
+	public static class MyConjunctiveRule extends ConjunctiveRule {
+		public int size() {
+			return m_Antds.size();
+		}
+	}
+
+	public static MyConjunctiveRule getConjunctiveRule(final Instances data) throws Exception {
+		final MyConjunctiveRule rule = new MyConjunctiveRule();
 		rule.buildClassifier(data);
 		return rule;
 	}
