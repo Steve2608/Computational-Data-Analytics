@@ -8,7 +8,7 @@ Deadline: May 3, 23:59
 | Student ID    | First Name  | Last Name      |
 | --------------|-------------|----------------|
 | 01555580      | Peter       | Chalupar       |
-| TODO      | TODO      | TODO         |
+| 01556188      | Alexander   | Raschl         |
 | TODO      | TODO       | TODO     |
 
 > *The submission should be in the form of a self-explanatory presentation (e.g. PDF, OpenOffice or PowerPoint) with a focus on interpretation or analysis.*
