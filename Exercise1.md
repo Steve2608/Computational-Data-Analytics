@@ -110,3 +110,183 @@ private static void performFriedmanNemenyiTests(final double[] avgRanks, final d
   }
 }
 ```
+
+
+
+
+
+## 3 Evaluation Methods (2 P.)
+
+> *In this task different evaluation methods using Weka are to be applied and their results discussed. Apply the rule classifier JRip to five datasets (e.g. those from task 1) by first dividing each dataset into two equal stratified parts, a training set and a validation set.*  
+
+ We chose the 5 Datasets which had the most samples among the datasets provided by Weka by default.
+
+> *1. Now train JRip on each of these training sets and evaluate the accuracy (percentage of
+     correctly classified examples) of the resulting classifiers (without changing customized
+     options like random seed) using:*
+> - *1x5 cross-validation*
+> - *1x10 cross-validation*
+> - *1x20 cross-validation*
+> - *leave-one-out*
+> - *the training set itself*
+
+The following table shows the achieved accuracies using the mentioned validation method:
+
+<pre>
+Dataset                  1x5 CV         1x10 CV         1x20 CV           LOOCV            Self
+supermarket             74,330%         75,281%         75,756%         75,238%         83,967%
+hypothyroid             99,046%         98,993%         98,993%         98,993%         99,205%
+segment                 90,000%         90,533%         91,467%         90,533%         96,667%
+german_credit           69,200%         72,400%         73,200%         72,200%         75,000%
+unbalanced              98,598%         98,598%         98,598%         98,364%         98,598%
+</pre>
+
+> *How do you assess the quality of the accuracy estimates obtained?*  
+
+At first, it can be observed that evaluating our model using the train set (*Self*) results in the highest obtained accuracies. 
+This is not surprising as the model has already seen the train data during the training process, 
+thus it is easier for the model to correctly classify seen data.  
+As a result, using the train set for evaluation leads to overly optimistic results and is generally considered as bad-practice.
+  
+Second, the accuracies provided by 1x20 CV and leave-one-out-CV (*LOOCV*) are quite the same. As the train datasets, 
+are fairly small (at most 2300 samples) a split into 20 folds should already be a good approximation to leave-one-out-CV. 
+ 
+The 5 fold cross validation is more separated from the  other methods, which can be explained by the relatively low amount of folds. 
+Thus, the results are more dependent on the random splits, as there is also more *unseen* data present on each cross validation iteration.  
+
+Interestingly, the accuracies obtained using the *unbalanced* dataset are fairly the same, which can explained by the overall class distribution, 
+which contains exactly 98.598% of negatives and only 1,4% positive examples. 
+ 
+To sum this up, we would either pick the 1x20 CV or the leave-one-out-CV if we have enough computing resources as our evaluation method of choice.
+
+> *2. Repeat the previous steps using:*
+> - *10x10 cross-validation*
+> - *5x2 cross-validation*
+> - *Compare the accuracy estimates obtained in
+    this way with the estimates from the previous task. In your opinion, does a smart selection
+    of random seeds lead to a better estimation?*   
+
+In the following, we see that the 5x2 CV results in large differences in accuracy compared to our preferred validation methods from before. 
+Only the results for the unbalanced dataset are the same, 
+as the learned ruleset is possibly exactly the same for all validation methods due to the highly skewed class distribution. 
+
+<pre>
+Dataset                  1x5 CV         1x10 CV         1x20 CV           LOOCV            Self        10x10 CV          5x2 CV
+supermarket             74,330%         75,281%         75,756%         75,238%         83,967%         75,065%         73,526%
+hypothyroid             99,046%         98,993%         98,993%         98,993%         99,205%         99,125%         99,024%
+segment                 90,000%         90,533%         91,467%         90,533%         96,667%         89,987%         86,827%
+german_credit           69,200%         72,400%         73,200%         72,200%         75,000%         71,540%         70,880%
+unbalanced              98,598%         98,598%         98,598%         98,364%         98,598%         98,598%         98,598%
+</pre>
+ 
+The main reason for multiple cross validation computations is to reduce the impact of the initial split into *N* folds.  
+Thus, if it happens that a "bad" split is made when using only 1x10 CV, this can result in slightly misleading results.   
+If using 10x10 CV, 10 separate splits are made and thus a single "bad" split would not have a major impact.  
+The mentioned differences of the 5x2 CV are caused by only using 2 folds for each split, which can result in highly biased folds. 
+As a result, 10x10 cross validation should definitely be preferred over 5x2 cross validation.   
+
+Furthermore, we think that a _smart_ selection of random seeds should actually not lead to better estimation results, 
+if a proper random sampling is made using this seed. 
+
+
+> *3. Determine the accuracy on the validation set by using it as a test set. Assuming that
+      the validation set is a real use case, how do you assess the estimates of the evaluation
+      methods from the previous two tasks?*  
+
+TODO
+
+
+<pre>
+Dataset                  1x5 CV         1x10 CV         1x20 CV           LOOCV            Self        10x10 CV          5x2 CV      Validation
+supermarket             74,330%         75,281%         75,756%         75,238%         83,967%         75,065%         73,526%         79,490%
+hypothyroid             99,046%         98,993%         98,993%         98,993%         99,205%         99,125%         99,024%         99,099%
+segment                 90,000%         90,533%         91,467%         90,533%         96,667%         89,987%         86,827%         94,000%
+german_credit           69,200%         72,400%         73,200%         72,200%         75,000%         71,540%         70,880%         71,500%
+unbalanced              98,598%         98,598%         98,598%         98,364%         98,598%         98,598%         98,598%         98,598%
+</pre>
+
+
+> *4. Select a sufficiently large dataset of a binary classification problem and compare the ROC
+   curve and AUC for __J48__ and __NaiveBayes__.*
+
+We selected the diabetes dataset which consists of 768 samples being 500 negative and 268 positive samples.
+We also perform a 50% Stratified Split in order to remain consistent with the previous tasks.
+
+- __J48__
+<pre>
+=== Summary ===
+
+Correctly Classified Instances         285               74.2188 %
+Incorrectly Classified Instances        99               25.7813 %
+Kappa statistic                          0.3806
+Mean absolute error                      0.3102
+Root mean squared error                  0.4605
+Relative absolute error                 68.1752 %
+Root relative squared error             97.3324 %
+Total Number of Instances              384     
+</pre>
+
+<pre>
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0,875    0,519    0,769      0,875    0,818      0,390    0,698     0,767     tested_negative
+                 0,481    0,125    0,660      0,481    0,556      0,390    0,698     0,542     tested_positive
+Weighted Avg.    0,742    0,387    0,732      0,742    0,730      0,390    0,698     0,691     
+</pre>
+
+<pre>
+=== Confusion Matrix ===
+
+   a   b   <-- classified as
+ 223  32 |   a = tested_negative
+  67  62 |   b = tested_positive
+</pre>
+
+![J48 ROC curve](./img/J48_ROC_diabetes.PNG "J48 ROC Curve")
+
+
+
+- __NaiveBayes__
+
+<pre>
+=== Summary ===
+
+Correctly Classified Instances         290               75.5208 %
+Incorrectly Classified Instances        94               24.4792 %
+Kappa statistic                          0.4406
+Mean absolute error                      0.2906
+Root mean squared error                  0.4064
+Relative absolute error                 63.8822 %
+Root relative squared error             85.9146 %
+Total Number of Instances              384     
+</pre>
+
+<pre>
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0,835    0,403    0,804      0,835    0,819      0,441    0,825     0,898     tested_negative
+                 0,597    0,165    0,647      0,597    0,621      0,441    0,825     0,731     tested_positive
+Weighted Avg.    0,755    0,323    0,751      0,755    0,753      0,441    0,825     0,842     
+</pre>
+
+<pre>
+=== Confusion Matrix ===
+
+   a   b   <-- classified as
+ 213  42 |   a = tested_negative
+  52  77 |   b = tested_positive
+</pre>
+
+![Naive Bayes ROC curve](./img/NaiveBayes_ROC_diabetes.PNG "Naive Bayes ROC Curve")
+
+| Dataset   |   Method   |   AUC   |
+| ----------|------------|---------|
+| diabetes  | NaiveBayes | 0.8247  |
+| diabetes  | J48        | 0.6978  |
+
+
+
+Generally, it can be observed that the AUC is considerably higher when using __NaiveBayes__ for classification than using the __J48__.  
+__NaiveBayes__ assigned 5 more data samples to the correct class than __J48__. 
