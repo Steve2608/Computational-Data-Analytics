@@ -221,7 +221,12 @@ if a proper random sampling is made using this seed.
       the validation set is a real use case, how do you assess the estimates of the evaluation
       methods from the previous two tasks?*  
 
-TODO
+Surprisingly, the accuracies obtained via evaluating the models using the validation set, which are listed below, 
+are most of the time higher, than the accuracy results obtained by performing cross validation on the train set. 
+While this is typically not a common thing to see, it can be explained via assuming that a "lucky" split has been made
+ during the Stratified Splits, resulting in a validation fold that is easy to predict for the trained classifier.
+Furthermore, it could be that the data is very homogeneous and as the model is trained on the full training set whilst evaluating it using the validation set, 
+it has seen _more_ data during the training process, which can enhance its accuracy.
 
 
 <pre>
@@ -313,7 +318,6 @@ Weighted Avg.    0,755    0,323    0,751      0,755    0,753      0,441    0,825
 | ----------|------------|---------|
 | diabetes  | NaiveBayes | 0.8247  |
 | diabetes  | J48        | 0.6978  |
-
 
 
 Generally, it can be observed that the AUC is considerably higher when using __NaiveBayes__ for classification than using the __J48__.  
