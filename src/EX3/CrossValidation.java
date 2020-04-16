@@ -130,7 +130,7 @@ public class CrossValidation {
 		final JRip ripper = new JRip();
 		ripper.setSeed(SEED);
 		ripper.buildClassifier(tts.train);
-		final Evaluation eval = new Evaluation(tts.test);
+		final Evaluation eval = new Evaluation(tts.train);
 		eval.evaluateModel(ripper, tts.test);
 		final double acc = eval.pctCorrect();
 		System.out.println(acc);
