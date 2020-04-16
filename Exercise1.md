@@ -21,22 +21,50 @@ Deadline: May 3, 23:59
 
 | Dataset | # Instances | # Attributes¹ | # Continuous¹ | # Discrete | # Classes |
 | ------- |------------ | ------------- | ------------- | ---------- | --------- |
-| hypothyroid | 3772 | 29 | 7 | 22 | 4 |
-| car | 1728 | 6 | 0 | 6 | 4 |
-| contact-lenses | 24 | 4 | 0 | 4 | 3 |
+| labor | 75 | 16 | 8 | 8 | 2 |
 | iris | 150 | 4 | 4 | 0 | 3 |
 | vote | 435 | 16 | 0 | 16 (all boolean) | 2 |
 | wine | 178 | 13 | 13 | 0 | 3 |
-| breast-cancer | 286 | 10 | 0 | 10 | 2 |
 | diabetes | 768 | 8 | 8 | 0 | 2 |
-| labor | 75 | 16 | 8 | 8 | 2 |
+| breast-cancer | 286 | 10 | 0 | 10 | 2 |
 | credit-g | 1000 | 21 | 7 | 13 | 2 |
+| car | 1728 | 6 | 0 | 6 | 4 |
+| contact-lenses | 24 | 4 | 0 | 4 | 3 |
+| hypothyroid | 3772 | 29 | 7 | 22 | 4 |
 
 ***¹**Without Class Attribute*
 
 > *1. Compare the number of rules, conditions and predicted classes of the resulting rule sets with respect to:*
 > - *the datasets*
 > - *the rule classifiers*
+
+**Number of Rules per Classifier and Dataset (including default rule):**
+| Dataset         | JRip            | JRip noPruning  | ConjunctiveRule |
+| --------------- | --------------- | --------------- | --------------- |
+| labor-neg-data  | 4               | 4               | 1               |
+| iris            | 3               | 5               | 1               |
+| vote            | 4               | 10              | 1               |
+| wine            | 5               | 4               | 1               |
+| pima_diabetes   | 4               | 11              | 1               |
+| breast-cancer   | 3               | 5               | 1               |
+| german_credit   | 3               | 13              | 1               |
+| car             | 49              | 97              | 1               |
+| contact-lenses  | 3               | 4               | 1               |
+| hypothyroid     | 5               | 11              | 1               |
+
+**Average number of Conditions er Classifier and Dataset (including default rule):**
+| Dataset         | JRip            | JRip noPruning  | ConjunctiveRule |
+| --------------- | --------------- | --------------- | --------------- |
+| labor-neg-data  | 1,00            | 1,00            | 1               |
+| iris            | 1,33            | 1,33            | 1               |
+| vote            | 1,50            | 1,50            | 1               |
+| wine            | 1,40            | 1,40            | 2               |
+| pima_diabetes   | 2,25            | 2,25            | 1               |
+| breast-cancer   | 1,33            | 1,33            | 0               |
+| german_credit   | 1,67            | 1,67            | 0               |
+| car             | 3,98            | 3,98            | 0               |
+| contact-lenses  | 1,00            | 1,00            | 0               |
+| hypothyroid     | 2,20            | 2,20            | 3               |
 
 > *2. Is there a default rule for all algorithms? If so:*
 > - *Which class is usually chosen as default rule?*
