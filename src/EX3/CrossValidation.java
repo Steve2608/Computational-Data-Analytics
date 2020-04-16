@@ -30,7 +30,7 @@ public class CrossValidation {
 		final List<Instances> datasets = fetchBiggestDatasets(DATA_PATH, N_DATA_SETS);
 		System.out.println(HEADER);
 		System.out.println("Selected the following datasets: ");
-		datasets.forEach(data -> System.out.println("Dataset" + data.relationName() + "Samples: " + data.size()));
+		datasets.forEach(data -> System.out.println("Dataset: " + data.relationName() + ", Samples: " + data.size()));
 		System.out.println();
 
 		final StringBuilder sb = new StringBuilder(String.format("%-45s %15s %15s %15s %15s %15s %15s %15s %15s\n",
@@ -105,6 +105,7 @@ public class CrossValidation {
 		ripper.setSeed(clf_seed);
 		final Evaluation eval = cvModel(ripper, tts.train, folds);
 		final double acc = eval.pctCorrect();
+		System.out.println(eval.toSummaryString());
 		System.out.println(acc);
 		return acc;
 	}
@@ -121,7 +122,7 @@ public class CrossValidation {
 		final Evaluation eval = new Evaluation(train);
 		eval.evaluateModel(ripper, train);
 		final double acc = eval.pctCorrect();
-		System.out.println(acc);
+		System.out.println(eval.toSummaryString());
 		return acc;
 	}
 
@@ -133,7 +134,7 @@ public class CrossValidation {
 		final Evaluation eval = new Evaluation(tts.train);
 		eval.evaluateModel(ripper, tts.test);
 		final double acc = eval.pctCorrect();
-		System.out.println(acc);
+		System.out.println(eval.toSummaryString());
 		return acc;
 	}
 
