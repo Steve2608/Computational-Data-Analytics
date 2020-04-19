@@ -5,3 +5,5 @@ out/
 
 # data for learners
 data/
+
+reports/UE1/*.pdf

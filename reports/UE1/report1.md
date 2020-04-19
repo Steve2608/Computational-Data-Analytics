@@ -9,7 +9,7 @@ Deadline: May 3, 23:59
 | --------------|-------------|----------------|
 | 01555580      | Peter       | Chalupar       |
 | 01556188      | Alexander   | Raschl         |
-| TODO      | TODO       | TODO     |
+| 01555842      | Stefan      | Brandl         |
 
 > *The submission should be in the form of a self-explanatory presentation (e.g. PDF, OpenOffice or PowerPoint) with a focus on interpretation or analysis.*
 
@@ -35,7 +35,7 @@ Deadline: May 3, 23:59
 ***¹**Without Class Attribute*
 
 **Sample output for labor.arff:**
-<pre>
+```
 JRIP rules:
 ===========
 
@@ -77,13 +77,14 @@ Not covered by the rule:
 bad	good	
 0.148148	0.851852	
 Accuracy= 75,439
-</pre>
+```
 
 > *1. Compare the number of rules, conditions and predicted classes of the resulting rule sets with respect to:*
 > - *the datasets*
 > - *the rule classifiers*
 
 **Number of Rules per Classifier and Dataset (including default rule):**
+
 | Dataset         | JRip            | JRip noPruning  | ConjunctiveRule |
 | --------------- | --------------- | --------------- | --------------- |
 | labor-neg-data  | 4               | 4               | 1               |
@@ -102,6 +103,7 @@ ConjunctiveRule always contains 1 Rule, as expected. JRip wihout pruning always 
 All datasets result in only 3-5 rules with JRip and pruning, even for 'big' datasets like *hypothyroid* or *credit*. However, except for *car* where about 100 and after pruning about 50! rules are used, which is a lot considering that the *car* dataset has only 6 attributes. 
 
 **Average number of Conditions per Classifier and Dataset (including default rule):**
+
 | Dataset         | JRip            | JRip noPruning  | ConjunctiveRule |
 | --------------- | --------------- | --------------- | --------------- |
 | labor-neg-data  | 1,00            | 1,00            | 1               |
@@ -122,6 +124,7 @@ The *car* dataset also leads to a lot of conditions per rule, which again is a l
 Interestingly, the *german_credit* dataset which has 21 attributes leads to only 3 rules with on average 1.67 conditions after pruning.
 
 **Number of Rules predicting certain Classes per Classifier and Dataset:**
+
 | Dataset         | JRip            | JRip noPruning  | ConjunctiveRule |
 | --------------- | --------------- | --------------- | --------------- |
 | labor-neg-data  | bad=3, good=1   | bad=3, good=1   |  bad=1          |
@@ -142,6 +145,7 @@ We can see that for binary class problems usually only one class is used for the
 > - *How do you interpret the quality of the default rule?*
 
 **Default Rules per Classifier and Dataset:**
+
 | Dataset         | JRip            | JRip noPruning  | ConjunctiveRule      |
 | --------------- | --------------- | --------------- | --------------- |
 | labor-neg-data  |  => class=good (35.0/0.0) |  => class=good (37.0/0.0) | -                    |
@@ -260,14 +264,13 @@ private static void performFriedmanNemenyiTests(final double[] avgRanks, final d
 
 The following table shows the achieved accuracies using the mentioned validation method:
 
-<pre>
-Dataset                  1x5 CV         1x10 CV         1x20 CV           LOOCV            Self
-supermarket             74,330%         75,281%         75,756%         75,238%         83,967%
-hypothyroid             99,046%         98,993%         98,993%         98,993%         99,205%
-segment                 90,000%         90,533%         91,467%         90,533%         96,667%
-german_credit           69,200%         72,400%         73,200%         72,200%         75,000%
-unbalanced              98,598%         98,598%         98,598%         98,364%         98,598%
-</pre>
+| Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    |
+|---------------|---------|---------|---------|---------|---------|
+| supermarket   | 74,330% | 75,281% | 75,756% | 75,238% | 83,967% |
+| hypothyroid   | 99,046% | 98,993% | 98,993% | 98,993% | 99,205% |
+| segment       | 90,000% | 90,533% | 91,467% | 90,533% | 96,667% |
+| german_credit | 69,200% | 72,400% | 73,200% | 72,200% | 75,000% |
+| unbalanced    | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% |
 
 > *How do you assess the quality of the accuracy estimates obtained?*  
 
@@ -298,14 +301,13 @@ In the following, we see that the 5x2 CV results in large differences in accurac
 Only the results for the unbalanced dataset are the same, 
 as the learned ruleset is possibly exactly the same for all validation methods due to the highly skewed class distribution. 
 
-<pre>
-Dataset                  1x5 CV         1x10 CV         1x20 CV           LOOCV            Self        10x10 CV          5x2 CV
-supermarket             74,330%         75,281%         75,756%         75,238%         83,967%         75,065%         73,526%
-hypothyroid             99,046%         98,993%         98,993%         98,993%         99,205%         99,125%         99,024%
-segment                 90,000%         90,533%         91,467%         90,533%         96,667%         89,987%         86,827%
-german_credit           69,200%         72,400%         73,200%         72,200%         75,000%         71,540%         70,880%
-unbalanced              98,598%         98,598%         98,598%         98,364%         98,598%         98,598%         98,598%
-</pre>
+| Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    |
+|---------------|---------|---------|---------|---------|---------|
+| supermarket   | 74,330% | 75,281% | 75,756% | 75,238% | 83,967% |
+| hypothyroid   | 99,046% | 98,993% | 98,993% | 98,993% | 99,205% |
+| segment       | 90,000% | 90,533% | 91,467% | 90,533% | 96,667% |
+| german_credit | 69,200% | 72,400% | 73,200% | 72,200% | 75,000% |
+| unbalanced    | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% |
  
 The main reason for multiple cross validation computations is to reduce the impact of the initial split into *N* folds.  
 Thus, if it happens that a "bad" split is made when using only 1x10 CV, this can result in slightly misleading results.   
@@ -328,16 +330,13 @@ While this is typically not a common thing to see, it can be explained via assum
 Furthermore, it could be that the data is very homogeneous and as the model is trained on the full training set whilst evaluating it using the validation set, 
 it has seen _more_ data during the training process, which can enhance its accuracy.
 
-
-<pre>
-Dataset                  1x5 CV         1x10 CV         1x20 CV           LOOCV            Self        10x10 CV          5x2 CV      Validation
-supermarket             74,330%         75,281%         75,756%         75,238%         83,967%         75,065%         73,526%         79,490%
-hypothyroid             99,046%         98,993%         98,993%         98,993%         99,205%         99,125%         99,024%         99,099%
-segment                 90,000%         90,533%         91,467%         90,533%         96,667%         89,987%         86,827%         94,000%
-german_credit           69,200%         72,400%         73,200%         72,200%         75,000%         71,540%         70,880%         71,500%
-unbalanced              98,598%         98,598%         98,598%         98,364%         98,598%         98,598%         98,598%         98,598%
-</pre>
-
+| Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    |
+|---------------|---------|---------|---------|---------|---------|
+| supermarket   | 74,330% | 75,281% | 75,756% | 75,238% | 83,967% |
+| hypothyroid   | 99,046% | 98,993% | 98,993% | 98,993% | 99,205% |
+| segment       | 90,000% | 90,533% | 91,467% | 90,533% | 96,667% |
+| german_credit | 69,200% | 72,400% | 73,200% | 72,200% | 75,000% |
+| unbalanced    | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% |
 
 > *4. Select a sufficiently large dataset of a binary classification problem and compare the ROC
    curve and AUC for __J48__ and __NaiveBayes__.*
@@ -346,7 +345,7 @@ We selected the diabetes dataset which consists of 768 samples being 500 negativ
 We also perform a 50% Stratified Split in order to remain consistent with the previous tasks.
 
 - __J48__
-<pre>
+```
 === Summary ===
 
 Correctly Classified Instances         285               74.2188 %
@@ -357,32 +356,30 @@ Root mean squared error                  0.4605
 Relative absolute error                 68.1752 %
 Root relative squared error             97.3324 %
 Total Number of Instances              384     
-</pre>
+```
 
-<pre>
+```
 === Detailed Accuracy By Class ===
 
                  TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
                  0,875    0,519    0,769      0,875    0,818      0,390    0,698     0,767     tested_negative
                  0,481    0,125    0,660      0,481    0,556      0,390    0,698     0,542     tested_positive
 Weighted Avg.    0,742    0,387    0,732      0,742    0,730      0,390    0,698     0,691     
-</pre>
+```
 
-<pre>
+```
 === Confusion Matrix ===
 
    a   b   <-- classified as
  223  32 |   a = tested_negative
   67  62 |   b = tested_positive
-</pre>
+```
 
 ![J48 ROC curve](./img/J48_ROC_diabetes.PNG "J48 ROC Curve")
 
-
-
 - __NaiveBayes__
 
-<pre>
+```
 === Summary ===
 
 Correctly Classified Instances         290               75.5208 %
@@ -393,24 +390,24 @@ Root mean squared error                  0.4064
 Relative absolute error                 63.8822 %
 Root relative squared error             85.9146 %
 Total Number of Instances              384     
-</pre>
+```
 
-<pre>
+```
 === Detailed Accuracy By Class ===
 
                  TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
                  0,835    0,403    0,804      0,835    0,819      0,441    0,825     0,898     tested_negative
                  0,597    0,165    0,647      0,597    0,621      0,441    0,825     0,731     tested_positive
 Weighted Avg.    0,755    0,323    0,751      0,755    0,753      0,441    0,825     0,842     
-</pre>
+```
 
-<pre>
+```
 === Confusion Matrix ===
 
    a   b   <-- classified as
  213  42 |   a = tested_negative
   52  77 |   b = tested_positive
-</pre>
+```
 
 ![Naive Bayes ROC curve](./img/NaiveBayes_ROC_diabetes.PNG "Naive Bayes ROC Curve")
 
@@ -418,7 +415,6 @@ Weighted Avg.    0,755    0,323    0,751      0,755    0,753      0,441    0,825
 | ----------|------------|---------|
 | diabetes  | NaiveBayes | 0.8247  |
 | diabetes  | J48        | 0.6978  |
-
 
 Generally, it can be observed that the AUC is considerably higher when using __NaiveBayes__ for classification than using the __J48__.  
 __NaiveBayes__ assigned 5 more data samples to the correct class than __J48__. 
