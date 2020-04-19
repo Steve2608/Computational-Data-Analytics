@@ -91,6 +91,12 @@ public class Util {
 		return tree;
 	}
 
+	public static J48 getJ48(final Instances data) throws Exception {
+		final J48 tree = new J48();
+		tree.buildClassifier(data);
+		return tree;
+	}
+
 	public static J48 getJ48Param(final Instances data) throws Exception {
 		final J48 tree = new J48();
 		tree.setUnpruned(true);

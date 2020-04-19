@@ -19,27 +19,28 @@ public class NoisePruning {
 	}
 
 	public static void main(final String[] args) throws Exception {
-		final Instances data = loadDataset(BEST_PERFORMING);
 		final AddNoise noise = new AddNoise();
 		final String header = "#####################";
 
 		for (final int percent : PERCENT) {
+			final Instances data = loadDataset(BEST_PERFORMING);
 			System.out.println(header + "\n" + percent + "% Noise\n" + header + "\n");
 			// apply noise
-			final int attr = data.numAttributes();
-			for (int i = 0; i < attr; i++) {
-				if (!data.attribute(i).isNumeric()) {
-					noise.addNoise(data, 0, percent, i, true);
-				}
-			}
-			// get the tree classifier
+			noise.addNoise(data, 0, percent, data.classIndex(), false);
+
+			// default parameters
+			final J48 _default = getJ48(data);
+			printTreeStats(_default, cvModel(_default, data));
+
+			// parameters specified by assignment
 			final J48 treeParam = getJ48Param(data);
 			printTreeStats(treeParam, cvModel(treeParam, data));
 
 			// parametrized trees with different confidence Factors
 			final J48 best = new J48GridSearcher(
-					new int[]{1, 2, 3, 4, 5},
-					IntStream.rangeClosed(1, 50).mapToObj(i -> ((float) i) / 100).toArray(Float[]::new)
+					new int[]{1, 2, 3},
+					IntStream.of(1, 5, 10, 30, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500)
+							.mapToObj(i -> ((float) i) / 1000).toArray(Float[]::new)
 			).search(data);
 			printTreeStats(best, cvModel(best, data));
 
@@ -53,6 +54,7 @@ public class NoisePruning {
 		System.out.println(String.format("Size of Tree: %.0f", tree.measureTreeSize()));
 		System.out.println("MinNumObj: " + tree.getMinNumObj());
 		System.out.println("ConfidenceFactor: " + tree.getConfidenceFactor());
+		System.out.println("Unpruned: " + tree.getUnpruned());
 		System.out.println(String.format("Accuracy: %.2f%%", eval.pctCorrect()));
 		System.out.println();
 	}
