@@ -6,4 +6,6 @@ out/
 # data for learners
 data/
 
+# ignore reports
 reports/UE1/*.pdf
+reports/UE1/*.html
