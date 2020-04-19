@@ -180,7 +180,8 @@ When looking at the accuracy with 10-Fold CV (see below) we can clearly see that
 > *4. Perform a Friedman-Nemenyi test on the results and check whether there is a significant difference between the performance of the classifiers.*
 
 **Accuracies and Ranks for the different Datasets and Classifiers (10-Fold CV):**
-<pre>
+
+```
 Dataset         JRip            JRip noPruning  ConjunctiveRule
 labor-neg-data  85,964912 (2)   89,473684 (1)   75,438596 (3)
 iris            93,333333 (1)   93,333333 (1)   66,666667 (3)
@@ -194,9 +195,9 @@ contact-lenses  79,166667 (1)   70,833333 (2)   54,166667 (3)
 hypothyroid     99,443266 (1)   99,178155 (2)   97,083775 (3)
 ---------------------------------------------------------------
 AVG RANK        1,500000        1,400000        2,800000
-</pre>
+```
 
-<pre>
+```
 Perform the Friedman statistics test:
 E.g. k = 3, N = 10
 Chi²F = 12N / k(k+1)  *  ( SUM(avgRanks²) - k(k+1)² / 4 )
@@ -207,16 +208,16 @@ Chi²(0.95,2) = 5.991   -> see https://people.richland.edu/james/lecture/m170/tb
 
 χ²(0.95;2) = 5,991000 < 8,000000 = χ²F
 Null hypotheses successfully rejected with p = 0.95!
-</pre>
+```
 
-<pre>
+```
 Perform the Nemenyi post-hoc test: 
 (which can be performed because the null hypothesis of the Friedman is rejected)
 q_alpha_0.05_#c3 = 2.343
 Critical Distance between pairs of avgRanks:
 CD = q_alpha * Math.sqrt(k * (k + 1) / (6 * n))
 CD = 1,047821
-</pre>
+```
 
 With a CD of ~1.05 we can show that both JRip Classifiers are significantly better than ConjunctiveRule. As 2.8 > 1.5 + 1.05 (or 1.04). However JRip with pruning is NOT significant better than JRip without pruning.
 
@@ -249,6 +250,88 @@ private static void performFriedmanNemenyiTests(final double[] avgRanks, final d
 
 ## 2 Noise and Pruning (2 P.)
 
+> Choose the dataset with the highest accuracy in the previous task and at least 50 instances. Disturb the class information in this dataset by adding different levels of noise (for example, 5%, 10%, 25%, 50%, 75%, 100%) with the filter `weka.filters.unsupervised.attribute.AddNoise` during pre-processing. Observe the accuracy and size of the learned trees on the original and the noisy datasets for the tree classifier `J48`
+
+>- with default parameters.
+>- without pruning (`unpruned=True` / `-U`) and minimum one instance per leaf (`minNumObj=1` / `-M 1`).
+
+**5% Noise**
+
+|                  | default parameters | unpruned & minNumObj=1 | gridSearched(confidenceFactor, minNumObj) |
+|------------------|--------------------|------------------------|-------------------------------------------|
+| Number of Rules  | 15                 | 227                    | 10                                        |
+| Size of Tree     | 29                 | 414                    | 19                                        |
+| minNumObj        | 2                  | 1                      | 2                                         |
+| ConfidenceFactor | 0.25               | 0.25                   | 0.001                                      |
+| Unpruned         | false              | true                   | false                                     |
+| Accuracy         | 94.49              | 92.10                  | 94.49                                     |
+
+**10% Noise**
+
+|                  | default parameters | unpruned & minNumObj=1 | gridSearched(confidenceFactor, minNumObj) |
+|------------------|--------------------|------------------------|-------------------------------------------|
+| Number of Rules  | 13                 | 381                    | 9                                         |
+| Size of Tree     | 25                 | 722                    | 17                                        |
+| minNumObj        | 2                  | 1                      | 2                                         |
+| ConfidenceFactor | 0.25               | 0.25                   | 0.001                                     |
+| Unpruned         | false              | true                   | false                                     |
+| Accuracy         | 89.48              | 84.15                  | 89.53                                     |
+
+**25% Noise**
+
+|                  | default parameters | unpruned & minNumObj=1 | gridSearched(confidenceFactor, minNumObj) |
+|------------------|--------------------|------------------------|-------------------------------------------|
+| Number of Rules  | 13                 | 820                    | 9                                         |
+| Size of Tree     | 25                 | 1588                   | 17                                        |
+| minNumObj        | 2                  | 1                      | 2                                         |
+| ConfidenceFactor | 0.25               | 0.25                   | 0.001                                     |
+| Unpruned         | false              | true                   | false                                     |
+| Accuracy         | 74.42              | 62.20                  | 74.60                                     |
+
+**50% Noise**
+
+|                  | default parameters | unpruned & minNumObj=1 | gridSearched(confidenceFactor, minNumObj) |
+|------------------|--------------------|------------------------|-------------------------------------------|
+| Number of Rules  | 640                | 1314                   | 11                                        |
+| Size of Tree     | 1240               | 2558                   | 21                                        |
+| minNumObj        | 2                  | 1                      | 2                                         |
+| ConfidenceFactor | 0.25               | 0.25                   | 0.03                                      |
+| Unpruned         | false              | true                   | false                                     |
+| Accuracy         | 39.26              | 35.55                  | 49.68                                     |
+
+**75% Noise**
+
+|                  | default parameters | unpruned & minNumObj=1 | gridSearched(confidenceFactor, minNumObj) |
+|------------------|--------------------|------------------------|-------------------------------------------|
+| Number of Rules  | 817                | 1492                   | 866                                       |
+| Size of Tree     | 1597               | 2911                   | 1689                                      |
+| minNumObj        | 2                  | 1                      | 2                                         |
+| ConfidenceFactor | 0.25               | 0.25                   | 0.45                                      |
+| Unpruned         | false              | true                   | false                                     |
+| Accuracy         | 24.36              | 25.80                  | 24.89                                     |
+
+**100% Noise**
+
+|                  | default parameters | unpruned & minNumObj=1 | gridSearched(confidenceFactor, minNumObj) |
+|------------------|--------------------|------------------------|-------------------------------------------|
+| Number of Rules  | 519                | 1016                   | 1                                         |
+| Size of Tree     | 1013               | 1983                   | 1                                         |
+| minNumObj        | 2                  | 1                      | 2                                         |
+| ConfidenceFactor | 0.25               | 0.25                   | 0.001                                     |
+| Unpruned         | false              | true                   | false                                     |
+| Accuracy         | 33.01              | 33.51                  | 34.15                                     |
+
+> Experiment a little with the parameters `-C` (confidenceFactor) and `-M` for pruned trees and try to find the combination that gives the highest accuracy on the data disturbed with 10% noise.
+
+Done for every percentage of noise. See tables above. 
+
+> Note: A x% noise level is created by replacing the example label at x% of all examples with a randomly selected label from one of the other classes. For two-class problems, you will notice that the performance at 100% noise is identical to the performance at 0% noise (Why?). 
+
+For a binary label, 100% noise would just correspond to an inversion of the label, thus not changing the behavior. 
+
+> In this case, adapt the bounds in an appropriate way (here 50% noise corresponds to random data).
+
+For our problem we defaulted to adding missing data when adding noise, thus avoiding label inversion. 
 
 \newpage
 
