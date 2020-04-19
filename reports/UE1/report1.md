@@ -13,6 +13,8 @@ Deadline: May 3, 23:59
 
 > *The submission should be in the form of a self-explanatory presentation (e.g. PDF, OpenOffice or PowerPoint) with a focus on interpretation or analysis.*
 
+\newpage
+
 ## 1 Rule Learning: Application and Interpretation (2 P.)
 
 > *In this exercise you will compare JRip, JRip without pruning (by setting usePruning=False) and ConjunctiveRule on different datasets. Therefore, choose ten datasets and try to have as much variance in the number of instances, the number of attributes and the attribute data types as possible.*
@@ -243,9 +245,12 @@ private static void performFriedmanNemenyiTests(final double[] avgRanks, final d
 }
 ```
 
+\newpage
+
+## 2 Noise and Pruning (2 P.)
 
 
-
+\newpage
 
 ## 3 Evaluation Methods (2 P.)
 
@@ -301,14 +306,14 @@ In the following, we see that the 5x2 CV results in large differences in accurac
 Only the results for the unbalanced dataset are the same, 
 as the learned ruleset is possibly exactly the same for all validation methods due to the highly skewed class distribution. 
 
-| Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    |
-|---------------|---------|---------|---------|---------|---------|
-| supermarket   | 74,330% | 75,281% | 75,756% | 75,238% | 83,967% |
-| hypothyroid   | 99,046% | 98,993% | 98,993% | 98,993% | 99,205% |
-| segment       | 90,000% | 90,533% | 91,467% | 90,533% | 96,667% |
-| german_credit | 69,200% | 72,400% | 73,200% | 72,200% | 75,000% |
-| unbalanced    | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% |
- 
+| Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV  |
+|---------------|---------|---------|---------|---------|---------|----------|---------|
+| supermarket   | 74,330% | 75,281% | 75,756% | 75,238% | 83,967% | 75,065%  | 73,526% |
+| hypothyroid   | 99,046% | 98,993% | 98,993% | 98,993% | 99,205% | 99,125%  | 99,024% |
+| segment       | 90,000% | 90,533% | 91,467% | 90,533% | 96,667% | 89,987%  | 86,827% |
+| german_credit | 69,200% | 72,400% | 73,200% | 72,200% | 75,000% | 71,540%  | 70,880% |
+| unbalanced    | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% | 98,598%  | 98,598% |
+
 The main reason for multiple cross validation computations is to reduce the impact of the initial split into *N* folds.  
 Thus, if it happens that a "bad" split is made when using only 1x10 CV, this can result in slightly misleading results.   
 If using 10x10 CV, 10 separate splits are made and thus a single "bad" split would not have a major impact.  
@@ -330,13 +335,13 @@ While this is typically not a common thing to see, it can be explained via assum
 Furthermore, it could be that the data is very homogeneous and as the model is trained on the full training set whilst evaluating it using the validation set, 
 it has seen _more_ data during the training process, which can enhance its accuracy.
 
-| Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    |
-|---------------|---------|---------|---------|---------|---------|
-| supermarket   | 74,330% | 75,281% | 75,756% | 75,238% | 83,967% |
-| hypothyroid   | 99,046% | 98,993% | 98,993% | 98,993% | 99,205% |
-| segment       | 90,000% | 90,533% | 91,467% | 90,533% | 96,667% |
-| german_credit | 69,200% | 72,400% | 73,200% | 72,200% | 75,000% |
-| unbalanced    | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% |
+| Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV  | Validation |
+|---------------|---------|---------|---------|---------|---------|----------|---------|------------|
+| supermarket   | 74,330% | 75,281% | 75,756% | 75,238% | 83,967% | 75,065%  | 73,526% | 79,490%    |
+| hypothyroid   | 99,046% | 98,993% | 98,993% | 98,993% | 99,205% | 99,125%  | 99,024% | 99,099%    |
+| segment       | 90,000% | 90,533% | 91,467% | 90,533% | 96,667% | 89,987%  | 86,827% | 94,000%    |
+| german_credit | 69,200% | 72,400% | 73,200% | 72,200% | 75,000% | 71,540%  | 70,880% | 71,500%    |
+| unbalanced    | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% | 98,598%  | 98,598% | 98,598%    |
 
 > *4. Select a sufficiently large dataset of a binary classification problem and compare the ROC
    curve and AUC for __J48__ and __NaiveBayes__.*
