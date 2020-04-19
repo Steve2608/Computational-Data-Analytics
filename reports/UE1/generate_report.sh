@@ -1,1 +1,1 @@
-pandoc report1.md -o report1.pdf --from markdown --template eisvogel --pdf-engine=xelatex -V geometry:landscape
+pandoc report1.md -o report1.pdf --from markdown --template eisvogel --pdf-engine=xelatex -V fontsize=11pt -V geometry:landscape
