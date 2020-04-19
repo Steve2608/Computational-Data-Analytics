@@ -1,7 +1,6 @@
 package EX3;
 
 import util.Util;
-import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.rules.JRip;
 import weka.core.Instances;
@@ -70,14 +69,6 @@ public class CrossValidation {
 
 		System.out.println(HEADER);
 		Files.writeString(Paths.get(logfile), sb.toString());
-	}
-
-	private static double getROC(final Classifier clf, final Instances data) throws Exception {
-		clf.buildClassifier(data);
-		Evaluation eval = new Evaluation(data);
-		final double[] preds = eval.evaluateModel(clf, data);
-		final double auc = eval.areaUnderROC(data.numAttributes() - 1);
-		return auc;
 	}
 
 	private static List<Instances> fetchBiggestDatasets(final String rootPath, final int nSets) {
