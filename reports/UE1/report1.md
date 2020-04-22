@@ -34,7 +34,7 @@ Deadline: May 3, 23:59
 | contact-lenses | 24 | 4 | 0 | 4 | 3 |
 | hypothyroid | 3772 | 29 | 7 | 22 | 4 |
 
-***¹**Without Class Attribute*
+**¹**Without Class Attribute
 
 **Sample output for labor.arff:**
 ```
@@ -72,12 +72,12 @@ Single conjunctive rule learner:
 
 Class distributions:
 Covered by the rule:
-bad	good	
-0.909091	0.090909	
+bad	good
+0.909091	0.090909
 
 Not covered by the rule:
-bad	good	
-0.148148	0.851852	
+bad	good
+0.148148	0.851852
 Accuracy= 75,439
 ```
 
@@ -102,7 +102,7 @@ Accuracy= 75,439
 
 ConjunctiveRule always contains 1 Rule, as expected. JRip wihout pruning always uses more rules than with pruning, as expected. However, for the wine dataset the noPruning option results in only 4 instead of 5 rules, wich is odd!
 
-All datasets result in only 3-5 rules with JRip and pruning, even for 'big' datasets like *hypothyroid* or *credit*. However, except for *car* where about 100 and after pruning about 50! rules are used, which is a lot considering that the *car* dataset has only 6 attributes. 
+All datasets result in only 3-5 rules with JRip and pruning, even for 'big' datasets like *hypothyroid* or *credit*. However, except for *car* where about 100 and after pruning about 50! rules are used, which is a lot considering that the *car* dataset has only 6 attributes.
 
 **Average number of Conditions per Classifier and Dataset (including default rule):**
 
@@ -121,7 +121,7 @@ All datasets result in only 3-5 rules with JRip and pruning, even for 'big' data
 
 We see that JRip without pruning also results in a lot more conditions per rule on average. ConjunctiveRule usually uses only 1 condition or even non at all (resulting in a simple default rule).
 
-The *car* dataset also leads to a lot of conditions per rule, which again is a lot considering that the *car* dataset has only 6 attributes. 
+The *car* dataset also leads to a lot of conditions per rule, which again is a lot considering that the *car* dataset has only 6 attributes.
 
 Interestingly, the *german_credit* dataset which has 21 attributes leads to only 3 rules with on average 1.67 conditions after pruning.
 
@@ -140,7 +140,7 @@ Interestingly, the *german_credit* dataset which has 21 attributes leads to only
 | contact-lenses  | hard=1, none=1, soft=1 | hard=1, none=1, soft=2 |  none=1         |
 | hypothyroid     | negative=1, primary_hypothyroid=3, compensated_hypothyroid=1 | negative=1, primary_hypothyroid=5, compensated_hypothyroid=5 |  compensated_hypothyroid=1 |
 
-We can see that for binary class problems usually only one class is used for the rules and the remaining one is handled by the default rule. 
+We can see that for binary class problems usually only one class is used for the rules and the remaining one is handled by the default rule.
 
 > *2. Is there a default rule for all algorithms? If so:*
 > - *Which class is usually chosen as default rule?*
@@ -211,7 +211,7 @@ Null hypotheses successfully rejected with p = 0.95!
 ```
 
 ```
-Perform the Nemenyi post-hoc test: 
+Perform the Nemenyi post-hoc test:
 (which can be performed because the null hypothesis of the Friedman is rejected)
 q_alpha_0.05_#c3 = 2.343
 Critical Distance between pairs of avgRanks:
@@ -250,7 +250,18 @@ private static void performFriedmanNemenyiTests(final double[] avgRanks, final d
 
 ## 2 Noise and Pruning (2 P.)
 
-> Choose the dataset with the highest accuracy in the previous task and at least 50 instances. Disturb the class information in this dataset by adding different levels of noise (for example, 5%, 10%, 25%, 50%, 75%, 100%) with the filter `weka.filters.unsupervised.attribute.AddNoise` during pre-processing. Observe the accuracy and size of the learned trees on the original and the noisy datasets for the tree classifier `J48`
+> Choose the dataset with the highest accuracy in the previous task and at least 50 instances.
+
+`hypothyroid.arff` from the weka sample data sets.
+
+```
+Num Instances:     3772
+Num Attributes:    30
+Num Continuous:    7 (Int 1 / Real 6)
+Num Discrete:      23
+```
+
+> Disturb the class information in this dataset by adding different levels of noise (for example, 5%, 10%, 25%, 50%, 75%, 100%) with the filter `weka.filters.unsupervised.attribute.AddNoise` during pre-processing. Observe the accuracy and size of the learned trees on the original and the noisy datasets for the tree classifier `J48`
 
 >- with default parameters.
 >- without pruning (`unpruned=True` / `-U`) and minimum one instance per leaf (`minNumObj=1` / `-M 1`).
@@ -323,15 +334,15 @@ private static void performFriedmanNemenyiTests(final double[] avgRanks, final d
 
 > Experiment a little with the parameters `-C` (confidenceFactor) and `-M` for pruned trees and try to find the combination that gives the highest accuracy on the data disturbed with 10% noise.
 
-Done for every percentage of noise. See tables above. 
+Done for every given percentage of noise. See tables above.
 
-> Note: A x% noise level is created by replacing the example label at x% of all examples with a randomly selected label from one of the other classes. For two-class problems, you will notice that the performance at 100% noise is identical to the performance at 0% noise (Why?). 
+> Note: A x% noise level is created by replacing the example label at x% of all examples with a randomly selected label from one of the other classes. For two-class problems, you will notice that the performance at 100% noise is identical to the performance at 0% noise (Why?).
 
-For a binary label, 100% noise would just correspond to an inversion of the label, thus not changing the behavior. 
+For a binary label, 100% noise would just correspond to an inversion of the label, thus not changing the behavior.
 
 > In this case, adapt the bounds in an appropriate way (here 50% noise corresponds to random data).
 
-For our problem we defaulted to adding missing data when adding noise, thus avoiding label inversion. 
+There are 4 different class labels { `negative`, `compensated_hypothyroid`, `primary_hypothyroid`, `secondary_hypothyroid` }, thus the problem does not occur. 
 
 \newpage
 
@@ -362,20 +373,20 @@ The following table shows the achieved accuracies using the mentioned validation
 
 > *How do you assess the quality of the accuracy estimates obtained?*  
 
-At first, it can be observed that evaluating our model using the train set (*Self*) results in the highest obtained accuracies. 
-This is not surprising as the model has already seen the train data during the training process, 
+At first, it can be observed that evaluating our model using the train set (*Self*) results in the highest obtained accuracies.
+This is not surprising as the model has already seen the train data during the training process,
 thus it is easier for the model to correctly classify seen data.  
 As a result, using the train set for evaluation leads to overly optimistic results and is generally considered as bad-practice.
-  
-Second, the accuracies provided by 1x20 CV and leave-one-out-CV (*LOOCV*) are quite the same. As the train datasets, 
-are fairly small (at most 2300 samples) a split into 20 folds should already be a good approximation to leave-one-out-CV. 
- 
-The 5 fold cross validation is more separated from the  other methods, which can be explained by the relatively low amount of folds. 
+
+Second, the accuracies provided by 1x20 CV and leave-one-out-CV (*LOOCV*) are quite the same. As the train datasets,
+are fairly small (at most 2300 samples) a split into 20 folds should already be a good approximation to leave-one-out-CV.
+
+The 5 fold cross validation is more separated from the  other methods, which can be explained by the relatively low amount of folds.
 Thus, the results are more dependent on the random splits, as there is also more *unseen* data present on each cross validation iteration.  
 
-Interestingly, the accuracies obtained using the *unbalanced* dataset are fairly the same, which can explained by the overall class distribution, 
-which contains exactly 98.598% of negatives and only 1,4% positive examples. 
- 
+Interestingly, the accuracies obtained using the *unbalanced* dataset are fairly the same, which can explained by the overall class distribution,
+which contains exactly 98.598% of negatives and only 1,4% positive examples.
+
 To sum this up, we would either pick the 1x20 CV or the leave-one-out-CV if we have enough computing resources as our evaluation method of choice.
 
 > *2. Repeat the previous steps using:*
@@ -385,9 +396,9 @@ To sum this up, we would either pick the 1x20 CV or the leave-one-out-CV if we h
     this way with the estimates from the previous task. In your opinion, does a smart selection
     of random seeds lead to a better estimation?*   
 
-In the following, we see that the 5x2 CV results in large differences in accuracy compared to our preferred validation methods from before. 
-Only the results for the unbalanced dataset are the same, 
-as the learned ruleset is possibly exactly the same for all validation methods due to the highly skewed class distribution. 
+In the following, we see that the 5x2 CV results in large differences in accuracy compared to our preferred validation methods from before.
+Only the results for the unbalanced dataset are the same,
+as the learned ruleset is possibly exactly the same for all validation methods due to the highly skewed class distribution.
 
 | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV  |
 |---------------|---------|---------|---------|---------|---------|----------|---------|
@@ -400,22 +411,22 @@ as the learned ruleset is possibly exactly the same for all validation methods d
 The main reason for multiple cross validation computations is to reduce the impact of the initial split into *N* folds.  
 Thus, if it happens that a "bad" split is made when using only 1x10 CV, this can result in slightly misleading results.   
 If using 10x10 CV, 10 separate splits are made and thus a single "bad" split would not have a major impact.  
-The mentioned differences of the 5x2 CV are caused by only using 2 folds for each split, which can result in highly biased folds. 
+The mentioned differences of the 5x2 CV are caused by only using 2 folds for each split, which can result in highly biased folds.
 As a result, 10x10 cross validation should definitely be preferred over 5x2 cross validation.   
 
-Furthermore, we think that a _smart_ selection of random seeds should actually not lead to better estimation results, 
-if a proper random sampling is made using this seed. 
+Furthermore, we think that a _smart_ selection of random seeds should actually not lead to better estimation results,
+if a proper random sampling is made using this seed.
 
 
 > *3. Determine the accuracy on the validation set by using it as a test set. Assuming that
       the validation set is a real use case, how do you assess the estimates of the evaluation
       methods from the previous two tasks?*  
 
-Surprisingly, the accuracies obtained via evaluating the models using the validation set, which are listed below, 
-are most of the time higher, than the accuracy results obtained by performing cross validation on the train set. 
+Surprisingly, the accuracies obtained via evaluating the models using the validation set, which are listed below,
+are most of the time higher, than the accuracy results obtained by performing cross validation on the train set.
 While this is typically not a common thing to see, it can be explained via assuming that a "lucky" split has been made
  during the Stratified Splits, resulting in a validation fold that is easy to predict for the trained classifier.
-Furthermore, it could be that the data is very homogeneous and as the model is trained on the full training set whilst evaluating it using the validation set, 
+Furthermore, it could be that the data is very homogeneous and as the model is trained on the full training set whilst evaluating it using the validation set,
 it has seen _more_ data during the training process, which can enhance its accuracy.
 
 | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV  | Validation |
@@ -505,4 +516,4 @@ Weighted Avg.    0,755    0,323    0,751      0,755    0,753      0,441    0,825
 | diabetes  | J48        | 0.6978  |
 
 Generally, it can be observed that the AUC is considerably higher when using __NaiveBayes__ for classification than using the __J48__.  
-__NaiveBayes__ assigned 5 more data samples to the correct class than __J48__. 
+__NaiveBayes__ assigned 5 more data samples to the correct class than __J48__.
