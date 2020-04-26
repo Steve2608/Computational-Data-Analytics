@@ -16,10 +16,10 @@ import static util.Util.cvModel;
 
 public class CrossValidation {
 
-	private static final long SEED = 0L;
+	private static final long SEED = 11L;
 	private static final int N_DATA_SETS = 5;
 	private static final String HEADER = "###########################################################";
-	private static final String logfile = "log.txt";
+	private static final String logfile = "logtest";
 
 	private CrossValidation() {
 	}
@@ -32,6 +32,12 @@ public class CrossValidation {
 		datasets.forEach(data -> System.out.println("Dataset: " + data.relationName() + ", Samples: " + data.size()));
 		System.out.println();
 
+		evaluate(datasets, false);
+		evaluate(datasets, true);
+
+	}
+
+	private static HashMap<String, List<Double>> evaluate(List<Instances> datasets, boolean switchSets) throws Exception {
 		final StringBuilder sb = new StringBuilder(String.format("%-45s %15s %15s %15s %15s %15s %15s %15s %15s\n",
 				"Dataset", "1x5 CV", "1x10 CV", "1x20 CV", "LOOCV", "Self", "10x10 CV", "5x2 CV", "Validation"));
 
@@ -41,7 +47,14 @@ public class CrossValidation {
 			final ArrayList<Double> accs = new ArrayList<>();
 			System.out.println(HEADER);
 			System.out.println("Performing Cross Validation on Dataset" + data.relationName() + "Samples: " + data.size());
-			final TTS tts = trainValSplit(data);
+			TTS tts = trainValSplit(data);
+			if (switchSets) {
+				tts = new TTS(tts.test, tts.train);
+			}
+
+			System.out.println("Train: " + tts.train.size());
+			System.out.println("Test: " + tts.test.size());
+
 			final int[] cvParams = {5, 10, 20, tts.train.size()};
 			for (final int folds : cvParams)
 				accs.add(getCVAcc(tts, folds));
@@ -68,7 +81,8 @@ public class CrossValidation {
 		System.out.println(sb.toString());
 
 		System.out.println(HEADER);
-		Files.writeString(Paths.get(logfile), sb.toString());
+		Files.writeString(Paths.get(logfile + "_switched_" + switchSets + ".txt"), sb.toString());
+		return resultMap;
 	}
 
 	private static List<Instances> fetchBiggestDatasets(final String rootPath, final int nSets) {
@@ -84,9 +98,38 @@ public class CrossValidation {
 				.collect(Collectors.toList());
 	}
 
-	private static TTS trainValSplit(final Instances data) throws Exception {
-		final StratifiableFolds sf = new StratifiableFolds(data, 2, SEED);
-		return new TTS(sf.getFold(1), sf.getFold(2));
+//	private static TTS trainValSplit(final Instances data) throws Exception {
+//		final StratifiableFolds sf = new StratifiableFolds(data, 2, SEED);
+//		return new TTS(sf.getFold(1), sf.getFold(2));
+//	}
+
+	private static TTS trainValSplit(Instances data) throws Exception {
+		StratifiedRemoveFolds strRmvFolds = new StratifiedRemoveFolds();
+		strRmvFolds.setFold(1);
+		strRmvFolds.setNumFolds(2);
+		strRmvFolds.setSeed(0);
+		strRmvFolds.setInvertSelection(false);
+		strRmvFolds.setInputFormat(data);
+		Instances train = StratifiedRemoveFolds.useFilter(data, strRmvFolds);
+
+		strRmvFolds = new StratifiedRemoveFolds();
+		strRmvFolds.setFold(2);
+		strRmvFolds.setNumFolds(2);
+		strRmvFolds.setSeed(0);
+		strRmvFolds.setInvertSelection(false);
+		strRmvFolds.setInputFormat(data);
+		Instances test = StratifiedRemoveFolds.useFilter(data, strRmvFolds);
+
+		return new TTS(train, test);
+//		Random rand = new Random(SEED);
+//		Instances randData = new Instances(data);
+//		randData.randomize(rand);
+//		if (randData.classAttribute().isNominal()){
+//			randData.stratify(2);
+//		}
+//		Instances train = randData.trainCV(2,1);
+//		Instances test = randData.testCV(2,1);
+//		return new TTS(train, test);
 	}
 
 
@@ -166,6 +209,7 @@ public class CrossValidation {
 			if (fold <= 0 || fold > getNumFolds())
 				throw new IllegalArgumentException(String.valueOf(fold));
 			setFold(fold);
+			System.out.println("Set fold is: " + getFold());
 			return useFilter(data, this);
 		}
 	}

@@ -46,11 +46,11 @@ public class Util {
 	public static Set<String> getFileNames(final String dir) {
 		return Arrays.stream(
 				Objects.requireNonNull(Path.of(dir)
-						                       .toFile()
-						                       .listFiles())
+						.toFile()
+						.listFiles())
 		).map(File::getAbsolutePath)
-				       .filter(fileName -> fileName.endsWith(".arff"))
-				       .collect(Collectors.toSet());
+				.filter(fileName -> fileName.endsWith(".arff"))
+				.collect(Collectors.toSet());
 	}
 
 	// WEKEA - WHY YOU NOT PROVIDE THIS!!!!
