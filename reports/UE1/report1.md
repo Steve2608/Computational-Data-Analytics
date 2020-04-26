@@ -369,9 +369,9 @@ The following table shows the achieved accuracies using the mentioned validation
 |-------|---------------|---------|---------|---------|---------|---------|
 |   1   |supermarket    | 75,065% | 75,194% | 74,935% | 76,059% | 86,085% |
 |   1   |hypothyroid    | 99,099% | 99,099% | 99,099% | 99,046% | 99,629% |
-|   1   |segment        |91,067%  | 90,933% | 92,000% | 90,933% | 97,333% |
+|   1   |segment        | 91,067% | 90,933% | 92,000% | 90,933% | 97,333% |
 |   1   |german_credit  | 70,600% | 73,400% | 74,200% | 73,000% | 74,000% |
-|   1   |unbalanced     |98,598%  | 98,598% | 98,598% | 98,364% | 98,598% |
+|   1   |unbalanced     | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% |
 
 | Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    |
 |-------|---------------|---------|---------|---------|---------|---------|
@@ -383,19 +383,21 @@ The following table shows the achieved accuracies using the mentioned validation
 
 > *How do you assess the quality of the accuracy estimates obtained?*  
 
-At first, it can be observed that evaluating our model using the train set (*Self*) results in the highest obtained accuracies.
+At first, it can be observed that evaluating our model using the train set (*Self*) results in the highest obtained accuracies for both train sets.
 This is not surprising as the model has already seen the train data during the training process,
 thus it is easier for the model to correctly classify seen data.  
 As a result, using the train set for evaluation leads to overly optimistic results and is generally considered as bad-practice.
 
-Second, the accuracies provided by 1x20 CV and leave-one-out-CV (*LOOCV*) are quite the same. As the train datasets,
-are fairly small (at most 2300 samples) a split into 20 folds should already be a good approximation to leave-one-out-CV.
+Second, the accuracies provided by 1x20 CV and leave-one-out-CV (*LOOCV*) are quite the same especially for train set 2. 
+As the train datasets, are fairly small (at most 2300 samples) a split into 20 folds should already be a good approximation to leave-one-out-CV.
 
-The 5 fold cross validation is more separated from the  other methods, which can be explained by the relatively low amount of folds.
+The 5 fold cross validation is more separated from the  other methods especially when looking at the german credit dataset,
+ which can be explained by the relatively low amount of folds.
 Thus, the results are more dependent on the random splits, as there is also more *unseen* data present on each cross validation iteration.  
 
 Interestingly, the accuracies obtained using the *unbalanced* dataset are fairly the same, which can explained by the overall class distribution,
-which contains exactly 98.598% of negatives and only 1,4% positive examples.
+which contains exactly 98.598% of negatives and only 1,4% positive examples. Also the obtained accuracies are fairly equal when comparing fold 1 and 2. 
+Thus, the Stratified split was successful.
 
 To sum this up, we would either pick the 1x20 CV or the leave-one-out-CV if we have enough computing resources as our evaluation method of choice.
 
@@ -440,12 +442,11 @@ if a proper random sampling is made using this seed.
       the validation set is a real use case, how do you assess the estimates of the evaluation
       methods from the previous two tasks?*  
 
-Surprisingly, the accuracies obtained via evaluating the models using the validation set, which are listed below,
-are most of the time higher, than the accuracy results obtained by performing cross validation on the train set.
-While this is typically not a common thing to see, it can be explained via assuming that a "lucky" split has been made
- during the Stratified Splits, resulting in a validation fold that is easy to predict for the trained classifier.
-Furthermore, it could be that the data is very homogeneous and as the model is trained on the full training set whilst evaluating it using the validation set,
-it has seen _more_ data during the training process, which can enhance its accuracy.
+The accuracies obtained via evaluating the models using the validation set, which are listed below,
+are most of the times slightly lower, than the accuracy results obtained by performing cross validation on the train set.
+We can observe, that the Accuracy estimates using LOOCV or 1x20 are fairly equal to the Validation accuracy. 
+Especially the 5x2 CV and 1x5 CV estimates are sometimes pretty different compared to the validation accuracy. 
+As a result, it is recommended to apply 1x20 CV, LOOCV or 10x10 CV to obtain accuracy estimates.
 
 | Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV | Validation |
 |-------|---------------|---------|---------|---------|---------|---------|---------|---------|------------|
