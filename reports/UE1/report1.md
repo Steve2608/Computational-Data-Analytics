@@ -363,13 +363,23 @@ There are 4 different class labels { `negative`, `compensated_hypothyroid`, `pri
 
 The following table shows the achieved accuracies using the mentioned validation method:
 
-| Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    |
-|---------------|---------|---------|---------|---------|---------|
-| supermarket   | 74,330% | 75,281% | 75,756% | 75,238% | 83,967% |
-| hypothyroid   | 99,046% | 98,993% | 98,993% | 98,993% | 99,205% |
-| segment       | 90,000% | 90,533% | 91,467% | 90,533% | 96,667% |
-| german_credit | 69,200% | 72,400% | 73,200% | 72,200% | 75,000% |
-| unbalanced    | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% |
+
+
+| Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    |
+|-------|---------------|---------|---------|---------|---------|---------|
+|   1   |supermarket    | 75,065% | 75,194% | 74,935% | 76,059% | 86,085% |
+|   1   |hypothyroid    | 99,099% | 99,099% | 99,099% | 99,046% | 99,629% |
+|   1   |segment        |91,067%  | 90,933% | 92,000% | 90,933% | 97,333% |
+|   1   |german_credit  | 70,600% | 73,400% | 74,200% | 73,000% | 74,000% |
+|   1   |unbalanced     |98,598%  | 98,598% | 98,598% | 98,364% | 98,598% |
+
+| Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    |
+|-------|---------------|---------|---------|---------|---------|---------|
+|   2   |supermarket    | 76,178% | 76,654% | 76,913% | 77,605% | 83,009% |
+|   2   |hypothyroid    | 99,046% | 99,258% | 99,364% | 99,099% | 99,682% |
+|   2   |segment        | 89,733% | 89,467% | 90,267% | 90,400% | 97,467% |
+|   2   |german_credit  | 69,800% | 72,000% | 72,600% | 71,800% | 77,400% |
+|   2   |unbalanced     | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% |
 
 > *How do you assess the quality of the accuracy estimates obtained?*  
 
@@ -400,13 +410,21 @@ In the following, we see that the 5x2 CV results in large differences in accurac
 Only the results for the unbalanced dataset are the same,
 as the learned ruleset is possibly exactly the same for all validation methods due to the highly skewed class distribution.
 
-| Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV  |
-|---------------|---------|---------|---------|---------|---------|----------|---------|
-| supermarket   | 74,330% | 75,281% | 75,756% | 75,238% | 83,967% | 75,065%  | 73,526% |
-| hypothyroid   | 99,046% | 98,993% | 98,993% | 98,993% | 99,205% | 99,125%  | 99,024% |
-| segment       | 90,000% | 90,533% | 91,467% | 90,533% | 96,667% | 89,987%  | 86,827% |
-| german_credit | 69,200% | 72,400% | 73,200% | 72,200% | 75,000% | 71,540%  | 70,880% |
-| unbalanced    | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% | 98,598%  | 98,598% |
+| Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV |
+|-------|---------------|---------|---------|---------|---------|---------|---------|---------|
+|   1   |supermarket    | 75,065% | 75,194% | 74,935% | 76,059% | 86,085% | 75,095% | 74,529% |
+|   1   |hypothyroid    | 99,099% | 99,099% | 99,099% | 99,046% | 99,629% | 99,051% | 98,876% | 
+|   1   |segment        |91,067%  | 90,933% | 92,000% | 90,933% | 97,333% | 90,853% | 86,533% | 
+|   1   |german_credit  | 70,600% | 73,400% | 74,200% | 73,000% | 74,000% | 72,480% | 71,600% |
+|   1   |unbalanced     |98,598%  | 98,598% | 98,598% | 98,364% | 98,598% | 98,598% | 98,598% | 
+
+| Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV | 
+|-------|---------------|---------|---------|---------|---------|---------|---------|---------|
+|   2   |supermarket    | 76,178% | 76,654% | 76,913% | 77,605% | 83,009% | 76,874% | 75,115% |
+|   2   |hypothyroid    | 99,046% | 99,258% | 99,364% | 99,099% | 99,682% | 99,168% | 98,674% |
+|   2   |segment        | 89,733% | 89,467% | 90,267% | 90,400% | 97,467% | 89,920% | 86,480% |
+|   2   |german_credit  | 69,800% | 72,000% | 72,600% | 71,800% | 77,400% | 71,800% | 68,920% |
+|   2   |unbalanced     | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% |
 
 The main reason for multiple cross validation computations is to reduce the impact of the initial split into *N* folds.  
 Thus, if it happens that a "bad" split is made when using only 1x10 CV, this can result in slightly misleading results.   
@@ -429,13 +447,21 @@ While this is typically not a common thing to see, it can be explained via assum
 Furthermore, it could be that the data is very homogeneous and as the model is trained on the full training set whilst evaluating it using the validation set,
 it has seen _more_ data during the training process, which can enhance its accuracy.
 
-| Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV  | Validation |
-|---------------|---------|---------|---------|---------|---------|----------|---------|------------|
-| supermarket   | 74,330% | 75,281% | 75,756% | 75,238% | 83,967% | 75,065%  | 73,526% | 79,490%    |
-| hypothyroid   | 99,046% | 98,993% | 98,993% | 98,993% | 99,205% | 99,125%  | 99,024% | 99,099%    |
-| segment       | 90,000% | 90,533% | 91,467% | 90,533% | 96,667% | 89,987%  | 86,827% | 94,000%    |
-| german_credit | 69,200% | 72,400% | 73,200% | 72,200% | 75,000% | 71,540%  | 70,880% | 71,500%    |
-| unbalanced    | 98,598% | 98,598% | 98,598% | 98,364% | 98,598% | 98,598%  | 98,598% | 98,598%    |
+| Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV | Validation |
+|-------|---------------|---------|---------|---------|---------|---------|---------|---------|------------|
+|   1   |supermarket    | 75,065% | 75,194% | 74,935% | 76,059% | 86,085% | 75,095% | 74,529% |  75,616%  |
+|   1   |hypothyroid    | 99,099% | 99,099% | 99,099% | 99,046% | 99,629% | 99,051% | 98,876% |  99,258%  |
+|   1   |segment        |91,067%  | 90,933% | 92,000% | 90,933% | 97,333% | 90,853% | 86,533% |  94,267%  |
+|   1   |german_credit  | 70,600% | 73,400% | 74,200% | 73,000% | 74,000% | 72,480% | 71,600% |  69,600%  |
+|   1   |unbalanced     |98,598%  | 98,598% | 98,598% | 98,364% | 98,598% | 98,598% | 98,598% |  98,598%  |
+
+| Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV | Validation |
+|-------|---------------|---------|---------|---------|---------|---------|---------|---------|------------|
+|   2   |supermarket    | 76,178% | 76,654% | 76,913% | 77,605% | 83,009% | 76,874% | 75,115% |  75,108%  |
+|   2   |hypothyroid    | 99,046% | 99,258% | 99,364% | 99,099% | 99,682% | 99,168% | 98,674% |  99,523%  |
+|   2   |segment        | 89,733% | 89,467% | 90,267% | 90,400% | 97,467% | 89,920% | 86,480% |  91,600%  |
+|   2   |german_credit  | 69,800% | 72,000% | 72,600% | 71,800% | 77,400% | 71,800% | 68,920% |  72,400%  |
+|   2   |unbalanced     | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% |  98,598%  |
 
 > *4. Select a sufficiently large dataset of a binary classification problem and compare the ROC
    curve and AUC for __J48__ and __NaiveBayes__.*
