@@ -274,6 +274,8 @@ Num Discrete:      23
 >- *with default parameters.*
 >- *without pruning (`unpruned=True` / `-U`) and minimum one instance per leaf (`minNumObj=1` / `-M 1`).*
 
+For the tables below, classification accuracy is calculated using a 10-fold cross-validation. 
+
 **5% Noise**
 
 |                  | default parameters | unpruned & minNumObj=1 | gridSearched(confidenceFactor, minNumObj) |
@@ -343,6 +345,12 @@ Num Discrete:      23
 > *Experiment a little with the parameters `-C` (confidenceFactor) and `-M` for pruned trees and try to find the combination that gives the highest accuracy on the data disturbed with 10% noise.*
 
 Done for every given percentage of noise. See the tables above.
+
+We can observe that for `confidenceFactor`s below `0.25` (the default value), the grid searched tree is considerably less complex, than the unpruned and even the pruned tree. We can observe this for *50% Noise* and *100% Noise* but also to lesser extents for *5% Noise*, *10% Noise* and *25% Noise*.
+
+Additionally, we can observe that `minNumObj` is always `2` and is thus equal to the default setting. 
+
+Finally, the grid searched tree yields the best classification accuracy for every level of noise except *75%*. 
 
 > *Note: A x% noise level is created by replacing the example label at x% of all examples with a randomly selected label from one of the other classes. For two-class problems, you will notice that the performance at 100% noise is identical to the performance at 0% noise (Why?).*
 
