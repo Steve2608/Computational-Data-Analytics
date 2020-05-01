@@ -1,3 +1,11 @@
+---
+title: "Computational Data Analytics, UE1"
+author: [Stefan Brandl, Peter Chalupar, Alexander Raschl]
+date: \today{}
+header-includes: 
+	- \usepackage[all]{nowidow}
+---
+
 # Exercise Part 1 of 3 - KV Computational Data Analytics (351.008)
 Summer term 2020 - Prof. Dr. Johannes Fürnkranz, Florian Beck
 
