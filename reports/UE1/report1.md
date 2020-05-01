@@ -46,7 +46,7 @@ JRIP rules:
 (longterm-disability-assistance = no) => class=bad (2.0/0.0)
  => class=good (35.0/0.0)
 
-Number of Rules : 4
+Number of Rules: 4
 
 Accuracy= 85,965
 
@@ -60,7 +60,7 @@ JRIP rules no Pruning:
 (longterm-disability-assistance = no) => class=bad (2.0/0.0)
  => class=good (37.0/0.0)
 
-Number of Rules : 4
+Number of Rules: 4
 
 Accuracy= 89,474
 
@@ -72,12 +72,12 @@ Single conjunctive rule learner:
 
 Class distributions:
 Covered by the rule:
-bad	good
-0.909091	0.090909
+bad    good
+0.909091   0.090909
 
 Not covered by the rule:
-bad	good
-0.148148	0.851852
+bad    good
+0.148148   0.851852
 Accuracy= 75,439
 ```
 
@@ -100,9 +100,9 @@ Accuracy= 75,439
 | contact-lenses  | 3               | 4               | 1               |
 | hypothyroid     | 5               | 11              | 1               |
 
-ConjunctiveRule always contains 1 Rule, as expected. JRip wihout pruning always uses more rules than with pruning, as expected. However, for the wine dataset the noPruning option results in only 4 instead of 5 rules, wich is odd!
+ConjunctiveRule always contains 1 Rule, as expected. JRip without pruning always uses more rules than with pruning, as expected. However, for the wine dataset, the noPruning option results in only 4 instead of 5 rules, which is odd!
 
-All datasets result in only 3-5 rules with JRip and pruning, even for 'big' datasets like *hypothyroid* or *credit*. However, except for *car* where about 100 and after pruning about 50! rules are used, which is a lot considering that the *car* dataset has only 6 attributes.
+All datasets result in only 3-5 rules with JRip and pruning, even for 'big' datasets like *hypothyroid* or *credit*. However, except for *car* - where about 100 and after pruning about 50 (!) - rules are used, which is a lot considering that the *car* dataset has only 6 attributes.
 
 **Average number of Conditions per Classifier and Dataset (including default rule):**
 
@@ -119,7 +119,7 @@ All datasets result in only 3-5 rules with JRip and pruning, even for 'big' data
 | contact-lenses  | 1,00            | 2,00            | 0               |
 | hypothyroid     | 2,20            | 3,45            | 3               |
 
-We see that JRip without pruning also results in a lot more conditions per rule on average. ConjunctiveRule usually uses only 1 condition or even non at all (resulting in a simple default rule).
+We see that JRip without pruning also results in a lot more conditions per rule on average. ConjunctiveRule usually uses only 1 condition or even none at all (resulting in a simple default rule).
 
 The *car* dataset also leads to a lot of conditions per rule, which again is a lot considering that the *car* dataset has only 6 attributes.
 
@@ -161,21 +161,21 @@ We can see that for binary class problems usually only one class is used for the
 | contact-lenses  |  => contact-lenses=none (6.0/1.0) |  => contact-lenses=none (3.0/0.0) | Rule is default ( => contact-lenses = none) |
 | hypothyroid     |  => Class=negative (92.0/5.0) |  => Class=negative (79.0/0.0) | -                    |
 
-JRip always (at least for our datasets) creates a DefaultRule. ConjunctiveRule creates per Definition only 1 Rule - howerever an implicit default rule is used at classification, when for instances not covered by the Rule the most prominent class not covered will be used. The explicit default Rules are always the same for all classifiers.
+JRip always (at least for our datasets) creates a DefaultRule. ConjunctiveRule creates per Definition only 1 Rule - however, an implicit default rule is used at classification, when for instances not covered by the Rule the most prominent class not covered will be used. The explicit default Rules are always the same for all classifiers.
 
-The quality of the default rules is usually pretty good on the training set, with a homogeneous set of instances covered. However, for the datasets diabetes, breast-cancer and german_credit the default rule is pretty heterogenic with about 20% missclassification.
+The quality of the default rules is usually pretty good on the training set, with a homogeneous set of instances covered. However, for the datasets diabetes, breast cancer, and german_credit the default rule is pretty heterogenic with about 20% misclassification.
 
-Interestingly, for a view datasets the single ConjunctiveRule results in a explicit default rule with no rule body. The accuracy (see below) however is not drastically better than for JRip, indicating that there is really hard to learn a meaningful rule for this datasets.
+Interestingly, for a view datasets, the single ConjunctiveRule results in an explicit default rule with no rule body. The accuracy (see below) however is not drastically better than for JRip, indicating it is hard to learn a meaningful rule for these datasets.
 
-> *3. On the basis of the previous subtasks, can you make a statement which of the datasets is the easiest or best to learn?*
+> *3. Based on the previous subtasks, can you make a statement which of the datasets is the easiest or best to learn?*
 
-When only looking at the learned rules and not on the performance/accuracy it is hard to judge the datasets. A low number of short rules can indicate a simple dataset, however, in the extreme case it can also indicate an hard dataset where no rule could be found.
+When only looking at the learned rules and not on the performance/accuracy it is hard to judge the datasets. A low number of short rules can indicate a simple dataset, however, in the extreme case, it can also indicate a hard dataset where no rule could be found.
 
-The *iris*, *labor*, and *contact-lenses* datasets result in very few and very simple rules for all three classifiers and homogeneous default rules indicating easy to learn datasets. However, when looking at the accaracy this is clearly not true for *contact-lenses*.
+The *iris*, *labor*, and *contact-lenses* datasets result in very few and very simple rules for all three classifiers and homogeneous default rules indicating easy to learn datasets. However, when looking at the accuracy this is not true for *contact-lenses*.
 
 The big *hypothyroid* or *german_credit* datasets also result in relatively few rules, especially after pruning, indicating good learnability, which however is not true for *german_credit* when looking at the true accuracy.
 
-When looking at the accuracy with 10-Fold CV (see below) we can clearly see that *hypothyroid* or *vote* are the easiest datasets, as even the Sinlge Conjunctive Rule gets >97% and >95% accuracy for those.
+When looking at the accuracy with 10-Fold CV (see below) we can see that *hypothyroid* or *vote* are the easiest datasets, as even the Single Conjunctive Rule gets >97% and >95% accuracy for those.
 
 > *4. Perform a Friedman-Nemenyi test on the results and check whether there is a significant difference between the performance of the classifiers.*
 
@@ -219,7 +219,7 @@ CD = q_alpha * Math.sqrt(k * (k + 1) / (6 * n))
 CD = 1,047821
 ```
 
-With a CD of ~1.05 we can show that both JRip Classifiers are significantly better than ConjunctiveRule. As 2.8 > 1.5 + 1.05 (or 1.04). However JRip with pruning is NOT significant better than JRip without pruning.
+With a CD of ~1.05 we can show that both JRip Classifiers are significantly better than ConjunctiveRule. As 2.8 > 1.5 + 1.05 (or 1.04). However, JRip with pruning is NOT significantly better than JRip without pruning.
 
 *Java Code, which we used to calculate the Friedman statistics and CD:*
 ```java
@@ -334,13 +334,13 @@ Num Discrete:      23
 
 > *Experiment a little with the parameters `-C` (confidenceFactor) and `-M` for pruned trees and try to find the combination that gives the highest accuracy on the data disturbed with 10% noise.*
 
-Done for every given percentage of noise. See tables above.
+Done for every given percentage of noise. See the tables above.
 
 > *Note: A x% noise level is created by replacing the example label at x% of all examples with a randomly selected label from one of the other classes. For two-class problems, you will notice that the performance at 100% noise is identical to the performance at 0% noise (Why?).*
 
 For a binary label, 100% noise would just correspond to an inversion of the label, thus not changing the behavior of the classifier.
 
-> *In this case, adapt the bounds in an appropriate way (here 50% noise corresponds to random data).*
+> *In this case, adapt the bounds appropriately (here 50% noise corresponds to random data).*
 
 There are 4 different class labels { `negative`, `compensated_hypothyroid`, `primary_hypothyroid`, `secondary_hypothyroid` }, thus the problem does not occur. 
 
@@ -383,16 +383,16 @@ The following table shows the achieved accuracies using the mentioned validation
 
 Firstly, it can be observed that evaluating our model using the train set (*Self*) results in the highest obtained accuracies for both train sets.
 This is not surprising as the model has already seen the train data during the training process, thus it is easier for the model to correctly classify seen data.  
-As a result, using the train set for evaluation leads to overly optimistic results and is considered bad-practice.
+As a result, using the train set for evaluation leads to overly optimistic results and is considered bad practice.
 
 Secondly, the accuracies provided by 1x20 CV and leave-one-out-CV (*LOOCV*) are quite similar especially for train set 2. 
 As the train datasets are fairly small (at most 2300 samples), a split into 20 folds should already be a good (enough) approximation to leave-one-out-CV.
 
-The 5 fold cross validation is more distinct from the other methods especially when looking at the german credit dataset (see below), which can be explained by the relatively low amount of folds.
-Thus, the results are more dependent on the random splits (=*bias*), as there is also more *unseen* data present on each cross validation iteration.  
+The 5 fold cross-validation is more distinct from the other methods especially when looking at the german credit dataset (see below), which can be explained by the relatively low amount of folds.
+Thus, the results are more dependent on the random splits (=*bias*), as there is also more *unseen* data present on each cross-validation iteration.  
 
-Interestingly, the accuracies obtained using the *unbalanced* dataset are fairly the same, which can explained by the overall class distribution,
-which contains exactly 98.598% of negatives and only 1,4% positive examples. Also the obtained accuracies are fairly equal when comparing fold 1 and 2. 
+Interestingly, the accuracies obtained using the *unbalanced* dataset are fairly the same, which can be explained by the overall class distribution,
+which contains exactly 98.598% of negatives and only 1,4% positive examples. Also, the obtained accuracies are fairly equal when comparing folds 1 and 2. 
 
 To sum up, we would either pick the 1x20 CV or the leave-one-out-CV if we have enough computing resources as our evaluation method of choice.
 
@@ -402,8 +402,7 @@ To sum up, we would either pick the 1x20 CV or the leave-one-out-CV if we have e
 > - *Compare the accuracy estimates obtained in this way with the estimates from the previous task. In your opinion, does a smart selection of random seeds lead to a better estimation?*   
 
 In the following, we see that the 5x2 CV results in large differences in accuracy compared to our preferred validation methods from before.
-Only the results for the unbalanced dataset are the same,
-as the learned ruleset is possibly exactly the same for all validation methods due to the highly skewed class distribution.
+Only the results for the unbalanced dataset are the same, as the learned ruleset is possibly the same for all validation methods due to the highly skewed class distribution.
 
 | Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV |
 |-------|---------------|---------|---------|---------|---------|---------|---------|---------|
@@ -421,19 +420,19 @@ as the learned ruleset is possibly exactly the same for all validation methods d
 |   2   |german_credit  | 69,800% | 72,000% | 72,600% | 71,800% | 77,400% | 71,800% | 68,920% |
 |   2   |unbalanced     | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% |
 
-The main reason for multiple cross validation computations is to reduce the impact of the initial split into *N* folds (=*bias*). 
-Thus, if it happens that a "bad" split is made when using only 1x10 CV, this can result in slightly misleading results.   
+The main reason for multiple cross-validation computations is to reduce the impact of the initial split into *N* folds (=*bias*). 
+Thus, if a "bad" split is made when using only 1x10 CV, this can result in slightly misleading results.   
 If using 10x10 CV, 10 separate splits are made and thus a single "bad" split would not have a major impact.  
 The mentioned differences of the 5x2 CV are caused by only using 2 folds for each split, which can result in highly biased folds.
-As a result, 10x10 cross validation should definitely be preferred over 5x2 cross validation.   
+As a result, 10x10 cross-validation should be preferred over 5x2 cross-validation.   
 
-Furthermore, we think that a *smart* selection of random seeds should actually not lead to better estimation results, if a proper random sampling is made using this seed.
+Furthermore, we think that a *smart* selection of random seeds should not lead to better estimation results if a proper random sampling is made using this seed.
 
 > *3. Determine the accuracy on the validation set by using it as a test set. Assuming that the validation set is a real use case, how do you assess the estimates of the evaluation methods from the previous two tasks?*  
 
-The accuracies obtained via evaluating the models using the validation set, which are listed below, are most of the times slightly lower, than the accuracy results obtained by performing cross validation on the train set.
+The accuracies obtained via evaluating the models using the validation set, which are listed below, are slightly lower most of the time, compared to the accuracy results obtained by performing cross-validation on the train set.
 We can observe, that the Accuracy estimates using LOOCV or 1x20 are fairly equal to the Validation accuracy. Especially the 5x2 CV and 1x5 CV estimates are sometimes pretty different compared to the validation accuracy. 
-As a result, it is recommended to apply 1x20 CV, LOOCV or 10x10 CV to obtain accuracy estimates.
+As a result, it is recommended to apply 1x20 CV, LOOCV or 10x10 CV to obtain accurate estimates.
 
 | Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV | Validation |
 |-------|---------------|---------|---------|---------|---------|---------|---------|---------|------------|
@@ -454,7 +453,7 @@ As a result, it is recommended to apply 1x20 CV, LOOCV or 10x10 CV to obtain acc
 > *4. Select a sufficiently large dataset of a binary classification problem and compare the ROC curve and AUC for **J48** and **NaiveBayes**.*
 
 We selected the diabetes dataset which consists of 768 samples (500 negative and 268 positive samples).
-We also perform a 50% Stratified Split in order to remain consistent with the previous tasks.
+We also perform a 50% Stratified Split to remain consistent with the previous tasks.
 
 - **J48**
 ```
