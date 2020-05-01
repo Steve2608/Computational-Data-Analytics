@@ -250,7 +250,7 @@ private static void performFriedmanNemenyiTests(final double[] avgRanks, final d
 
 ## 2 Noise and Pruning (2 P.)
 
-> Choose the dataset with the highest accuracy in the previous task and at least 50 instances.
+> *Choose the dataset with the highest accuracy in the previous task and at least 50 instances.*
 
 `hypothyroid.arff` from the weka sample data sets.
 
@@ -261,10 +261,10 @@ Num Continuous:    7 (Int 1 / Real 6)
 Num Discrete:      23
 ```
 
-> Disturb the class information in this dataset by adding different levels of noise (for example, 5%, 10%, 25%, 50%, 75%, 100%) with the filter `weka.filters.unsupervised.attribute.AddNoise` during pre-processing. Observe the accuracy and size of the learned trees on the original and the noisy datasets for the tree classifier `J48`
+> *Disturb the class information in this dataset by adding different levels of noise (for example, 5%, 10%, 25%, 50%, 75%, 100%) with the filter `weka.filters.unsupervised.attribute.AddNoise` during pre-processing. Observe the accuracy and size of the learned trees on the original and the noisy datasets for the tree classifier `J48`.*
 
->- with default parameters.
->- without pruning (`unpruned=True` / `-U`) and minimum one instance per leaf (`minNumObj=1` / `-M 1`).
+>- *with default parameters.*
+>- *without pruning (`unpruned=True` / `-U`) and minimum one instance per leaf (`minNumObj=1` / `-M 1`).*
 
 **5% Noise**
 
@@ -332,15 +332,15 @@ Num Discrete:      23
 | Unpruned         | false              | true                   | false                                     |
 | Accuracy         | 33.01              | 33.51                  | 34.15                                     |
 
-> Experiment a little with the parameters `-C` (confidenceFactor) and `-M` for pruned trees and try to find the combination that gives the highest accuracy on the data disturbed with 10% noise.
+> *Experiment a little with the parameters `-C` (confidenceFactor) and `-M` for pruned trees and try to find the combination that gives the highest accuracy on the data disturbed with 10% noise.*
 
 Done for every given percentage of noise. See tables above.
 
-> Note: A x% noise level is created by replacing the example label at x% of all examples with a randomly selected label from one of the other classes. For two-class problems, you will notice that the performance at 100% noise is identical to the performance at 0% noise (Why?).
+> *Note: A x% noise level is created by replacing the example label at x% of all examples with a randomly selected label from one of the other classes. For two-class problems, you will notice that the performance at 100% noise is identical to the performance at 0% noise (Why?).*
 
-For a binary label, 100% noise would just correspond to an inversion of the label, thus not changing the behavior.
+For a binary label, 100% noise would just correspond to an inversion of the label, thus not changing the behavior of the classifier.
 
-> In this case, adapt the bounds in an appropriate way (here 50% noise corresponds to random data).
+> *In this case, adapt the bounds in an appropriate way (here 50% noise corresponds to random data).*
 
 There are 4 different class labels { `negative`, `compensated_hypothyroid`, `primary_hypothyroid`, `secondary_hypothyroid` }, thus the problem does not occur. 
 
@@ -363,8 +363,6 @@ There are 4 different class labels { `negative`, `compensated_hypothyroid`, `pri
 
 The following table shows the achieved accuracies using the mentioned validation method:
 
-
-
 | Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    |
 |-------|---------------|---------|---------|---------|---------|---------|
 |   1   |supermarket    | 75,065% | 75,194% | 74,935% | 76,059% | 86,085% |
@@ -383,30 +381,25 @@ The following table shows the achieved accuracies using the mentioned validation
 
 > *How do you assess the quality of the accuracy estimates obtained?*  
 
-At first, it can be observed that evaluating our model using the train set (*Self*) results in the highest obtained accuracies for both train sets.
-This is not surprising as the model has already seen the train data during the training process,
-thus it is easier for the model to correctly classify seen data.  
-As a result, using the train set for evaluation leads to overly optimistic results and is generally considered as bad-practice.
+Firstly, it can be observed that evaluating our model using the train set (*Self*) results in the highest obtained accuracies for both train sets.
+This is not surprising as the model has already seen the train data during the training process, thus it is easier for the model to correctly classify seen data.  
+As a result, using the train set for evaluation leads to overly optimistic results and is considered bad-practice.
 
-Second, the accuracies provided by 1x20 CV and leave-one-out-CV (*LOOCV*) are quite the same especially for train set 2. 
-As the train datasets, are fairly small (at most 2300 samples) a split into 20 folds should already be a good approximation to leave-one-out-CV.
+Secondly, the accuracies provided by 1x20 CV and leave-one-out-CV (*LOOCV*) are quite similar especially for train set 2. 
+As the train datasets are fairly small (at most 2300 samples), a split into 20 folds should already be a good (enough) approximation to leave-one-out-CV.
 
-The 5 fold cross validation is more separated from the  other methods especially when looking at the german credit dataset,
- which can be explained by the relatively low amount of folds.
-Thus, the results are more dependent on the random splits, as there is also more *unseen* data present on each cross validation iteration.  
+The 5 fold cross validation is more distinct from the other methods especially when looking at the german credit dataset (see below), which can be explained by the relatively low amount of folds.
+Thus, the results are more dependent on the random splits (=*bias*), as there is also more *unseen* data present on each cross validation iteration.  
 
 Interestingly, the accuracies obtained using the *unbalanced* dataset are fairly the same, which can explained by the overall class distribution,
 which contains exactly 98.598% of negatives and only 1,4% positive examples. Also the obtained accuracies are fairly equal when comparing fold 1 and 2. 
-Thus, the Stratified split was successful.
 
-To sum this up, we would either pick the 1x20 CV or the leave-one-out-CV if we have enough computing resources as our evaluation method of choice.
+To sum up, we would either pick the 1x20 CV or the leave-one-out-CV if we have enough computing resources as our evaluation method of choice.
 
 > *2. Repeat the previous steps using:*
 > - *10x10 cross-validation*
 > - *5x2 cross-validation*
-> - *Compare the accuracy estimates obtained in
-    this way with the estimates from the previous task. In your opinion, does a smart selection
-    of random seeds lead to a better estimation?*   
+> - *Compare the accuracy estimates obtained in this way with the estimates from the previous task. In your opinion, does a smart selection of random seeds lead to a better estimation?*   
 
 In the following, we see that the 5x2 CV results in large differences in accuracy compared to our preferred validation methods from before.
 Only the results for the unbalanced dataset are the same,
@@ -428,24 +421,18 @@ as the learned ruleset is possibly exactly the same for all validation methods d
 |   2   |german_credit  | 69,800% | 72,000% | 72,600% | 71,800% | 77,400% | 71,800% | 68,920% |
 |   2   |unbalanced     | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% |
 
-The main reason for multiple cross validation computations is to reduce the impact of the initial split into *N* folds.  
+The main reason for multiple cross validation computations is to reduce the impact of the initial split into *N* folds (=*bias*). 
 Thus, if it happens that a "bad" split is made when using only 1x10 CV, this can result in slightly misleading results.   
 If using 10x10 CV, 10 separate splits are made and thus a single "bad" split would not have a major impact.  
 The mentioned differences of the 5x2 CV are caused by only using 2 folds for each split, which can result in highly biased folds.
 As a result, 10x10 cross validation should definitely be preferred over 5x2 cross validation.   
 
-Furthermore, we think that a _smart_ selection of random seeds should actually not lead to better estimation results,
-if a proper random sampling is made using this seed.
+Furthermore, we think that a *smart* selection of random seeds should actually not lead to better estimation results, if a proper random sampling is made using this seed.
 
+> *3. Determine the accuracy on the validation set by using it as a test set. Assuming that the validation set is a real use case, how do you assess the estimates of the evaluation methods from the previous two tasks?*  
 
-> *3. Determine the accuracy on the validation set by using it as a test set. Assuming that
-      the validation set is a real use case, how do you assess the estimates of the evaluation
-      methods from the previous two tasks?*  
-
-The accuracies obtained via evaluating the models using the validation set, which are listed below,
-are most of the times slightly lower, than the accuracy results obtained by performing cross validation on the train set.
-We can observe, that the Accuracy estimates using LOOCV or 1x20 are fairly equal to the Validation accuracy. 
-Especially the 5x2 CV and 1x5 CV estimates are sometimes pretty different compared to the validation accuracy. 
+The accuracies obtained via evaluating the models using the validation set, which are listed below, are most of the times slightly lower, than the accuracy results obtained by performing cross validation on the train set.
+We can observe, that the Accuracy estimates using LOOCV or 1x20 are fairly equal to the Validation accuracy. Especially the 5x2 CV and 1x5 CV estimates are sometimes pretty different compared to the validation accuracy. 
 As a result, it is recommended to apply 1x20 CV, LOOCV or 10x10 CV to obtain accuracy estimates.
 
 | Fold  | Dataset       | 1x5 CV  | 1x10 CV | 1x20 CV | LOOCV   | Self    | 10x10 CV | 5x2 CV | Validation |
@@ -464,13 +451,12 @@ As a result, it is recommended to apply 1x20 CV, LOOCV or 10x10 CV to obtain acc
 |   2   |german_credit  | 69,800% | 72,000% | 72,600% | 71,800% | 77,400% | 71,800% | 68,920% |  72,400%  |
 |   2   |unbalanced     | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% | 98,598% |  98,598%  |
 
-> *4. Select a sufficiently large dataset of a binary classification problem and compare the ROC
-   curve and AUC for __J48__ and __NaiveBayes__.*
+> *4. Select a sufficiently large dataset of a binary classification problem and compare the ROC curve and AUC for **J48** and **NaiveBayes**.*
 
-We selected the diabetes dataset which consists of 768 samples being 500 negative and 268 positive samples.
+We selected the diabetes dataset which consists of 768 samples (500 negative and 268 positive samples).
 We also perform a 50% Stratified Split in order to remain consistent with the previous tasks.
 
-- __J48__
+- **J48**
 ```
 === Summary ===
 
@@ -503,7 +489,7 @@ Weighted Avg.    0,742    0,387    0,732      0,742    0,730      0,390    0,698
 
 ![J48 ROC curve](./img/J48_ROC_diabetes.PNG "J48 ROC Curve")
 
-- __NaiveBayes__
+- **NaiveBayes**
 
 ```
 === Summary ===
@@ -542,5 +528,6 @@ Weighted Avg.    0,755    0,323    0,751      0,755    0,753      0,441    0,825
 | diabetes  | NaiveBayes | 0.8247  |
 | diabetes  | J48        | 0.6978  |
 
-Generally, it can be observed that the AUC is considerably higher when using __NaiveBayes__ for classification than using the __J48__.  
-__NaiveBayes__ assigned 5 more data samples to the correct class than __J48__.
+Generally, it can be observed that the AUC is considerably higher when using **NaiveBayes** for classification than using the **J48**.
+
+**NaiveBayes** assigned 5 more data samples to the correct class than **J48**.
