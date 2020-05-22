@@ -159,8 +159,6 @@ The recommended way of estimating the performance of a pipeline including discre
 This of course, results in slightly lower accuracy estimates, as shown in the table above, but suggests more accurate estimate. 
 
 The actual size of the learned trees pretty much remains the same, the only exceptions are the trees resulting from learning the Filtered Classification Pipeline. Without binary discretization we get a tree-size of 42 and with a tree-size of only 33 with only 17 leaves, which is quite few compared to the other trained models. Trees learned from binary discretized date tend to have slightly less learned rules simply because the number of splits to choose from is reduced by the binary discretization. As the number of splits cannot be chosen at the same granular level as it would be possible using the normal discretization approach, the estimated accuracy can suffer a little bit.
-
-The discretization approach could even be considered as a anti-overfitting approach for decision trees, which could be applied instead of error-pruning after the tree has been built as it leads to simpler trees during training.  
 ```
 Classifier Model
 J48 pruned tree
