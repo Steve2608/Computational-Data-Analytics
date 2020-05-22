@@ -150,7 +150,17 @@ Overall Tree Comparison:
 |   True      |      J48      | discretized   |   59    |   30    |  72,430  |
 |   True      |  FilteredClf  | original      | **33**  | **17**  |  71,495  |
 
-##TODO INTERPRETATION
+Looking at the table it can be observed that the discretized version achieve a major buff regarding the accuracy estimates. However, it needs to be noted that the discretizer has been applied to the whole Dataset, before splitting the dataset into folds during 10-Fold Cross validation. 
+ 
+As the discretizer as a supervised approach uses the label/class information of the data samples this should be generally avoided, as the classifier that is later on applied to the training dataset has indirect knowledge of the samples in the test set. 
+Thus, the resulting estimates for the discretized approach with latter 10 Fold Cross validation are probably slightly too high.  
+
+The recommended way of estimating the performance of a pipeline including discretization as preprocessing step and a classifier is to split the dataset into folds at first, according to the 10-fold CV, and afterwards apply the discretization and train the classifier on the training folds only, whilst later on testing on the test fold, which is completely separated from the classification pipeline from the beginning. 
+This of course, results in slightly lower accuracy estimates, as shown in the table above, but suggests more accurate estimate. 
+
+The actual size of the learned trees pretty much remains the same, the only exceptions are the trees resulting from learning the Filtered Classification Pipeline. Without binary discretization we get a tree-size of 42 and with a tree-size of only 33 with only 17 leaves, which is quite few compared to the other trained models. Trees learned from binary discretized date tend to have slightly less learned rules simply because the number of splits to choose from is reduced by the binary discretization. As the number of splits cannot be chosen at the same granular level as it would be possible using the normal discretization approach, the estimated accuracy can suffer a little bit.
+
+The discretization approach could even be considered as a anti-overfitting approach for decision trees, which could be applied instead of error-pruning after the tree has been built as it leads to simpler trees during training.  
 ```
 Classifier Model
 J48 pruned tree
