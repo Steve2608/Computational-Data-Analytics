@@ -9,6 +9,8 @@ data/
 # ignore reports
 reports/UE1/*.pdf
 reports/UE1/*.html
+reports/UE2/*.pdf
+reports/UE2/*.html
 
 # ignore submission files
 submission_UE?.zip
