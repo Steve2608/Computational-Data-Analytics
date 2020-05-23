@@ -261,8 +261,6 @@ The new parametrization (`lowerBoundMinSupport=2/14`, `minMetric=0.75`) results 
 
 > *2. What are the best rules with respect to confidence, lift and leverage?*
 
-See [rasbt.github.io](https://rasbt.github.io/mlxtend/user_guide/frequent_patterns/association_rules/) for explanation of terms *confidence*, *lift*, *leverage*. 
-
 - *confidence*: There are `58/67` rules with `confidence=1`, so there is no clear "best" rule
 - *lift*: 
 ```
@@ -292,7 +290,7 @@ Rule 5 shows that in 100% of the cases, there was no play `play=no`, when it was
     <conf:(1)> lift:(1.56) lev:(0.08) [1] conv:(1.07)
 ```
 
-Rule 7 was surprising to me, as even if it was rainy (`outlook=rainy`) but not windy (`windy=FALSE`) there would be a play.
+Rule 7 was surprising to us, as even if it was rainy (`outlook=rainy`) but not windy (`windy=FALSE`) there would be a play.
 
 ```
 17. temperature=hot play=yes 2 ==> outlook=overcast 2
