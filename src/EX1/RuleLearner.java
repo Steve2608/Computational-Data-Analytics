@@ -2,6 +2,7 @@ package EX1;
 
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.rules.JRip;
+import weka.classifiers.rules.Rule;
 import weka.core.Attribute;
 import weka.core.Instances;
 
@@ -41,19 +42,19 @@ public class RuleLearner {
 			final JRip pruning = getRipper(data, true);
 			final Evaluation evalPruning = cvModel(pruning, data);
 			System.out.println(pruning);
-			System.out.println(String.format("Accuracy= %.3f",evalPruning.pctCorrect()));
+			System.out.println(String.format("Accuracy= %.3f", evalPruning.pctCorrect()));
 			System.out.println(HEADER);
 
 			final JRip noPruning = getRipper(data, false);
 			final Evaluation evalNoPruning = cvModel(noPruning, data);
 			System.out.println(noPruning);
-			System.out.println(String.format("Accuracy= %.3f",evalNoPruning.pctCorrect()));
+			System.out.println(String.format("Accuracy= %.3f", evalNoPruning.pctCorrect()));
 			System.out.println(HEADER);
 
 			final MyConjunctiveRule rule = getConjunctiveRule(data);
 			final Evaluation evalRule = cvModel(rule, data);
 			System.out.println(rule);
-			System.out.println(String.format("Accuracy= %.3f",evalRule.pctCorrect()));
+			System.out.println(String.format("Accuracy= %.3f", evalRule.pctCorrect()));
 			System.out.println(HEADER);
 
 			final List<Double> accs = List.of(evalPruning.pctCorrect(), evalNoPruning.pctCorrect(), evalRule.pctCorrect());
@@ -73,8 +74,8 @@ public class RuleLearner {
 					pruning.getRuleset().size(), noPruning.getRuleset().size(), 1));
 
 			numberOfConditions.append(String.format("| %-15s | %-15.2f | %-15.2f | %-15s |\n", data.relationName(),
-					pruning.getRuleset().stream().mapToDouble(r -> r.size()).average().getAsDouble(),
-					noPruning.getRuleset().stream().mapToDouble(r -> r.size()).average().getAsDouble(),
+					pruning.getRuleset().stream().mapToDouble(Rule::size).average().orElse(0),
+					noPruning.getRuleset().stream().mapToDouble(Rule::size).average().orElse(0),
 					rule.size()));
 
 			numberOfClasses.append(String.format("| %-15s | %-15s | %-15s | %-15s |\n", data.relationName(),
@@ -114,41 +115,43 @@ public class RuleLearner {
 
 	}
 
-	private static String getDefaultRule(MyConjunctiveRule rule) {
+	private static String getDefaultRule(final MyConjunctiveRule rule) {
 		if (!rule.hasAntds()) {
-			String ruleString =  rule.toString().split("\n")[4];
-			return String.format("Rule is default (%s)",ruleString);
-		}
-		else {
+			final String ruleString = rule.toString().split("\n")[4];
+			return String.format("Rule is default (%s)", ruleString);
+		} else {
 			return "-";
 		}
 	}
 
-	private static String getDefaultRule(JRip jrip) throws NoSuchFieldException, IllegalAccessException {
-		Field f = jrip.getClass().getDeclaredField("m_Class");
+	private static String getDefaultRule(final JRip jrip) throws NoSuchFieldException, IllegalAccessException {
+		final Field f = jrip.getClass().getDeclaredField("m_Class");
 		f.setAccessible(true);
-		Attribute ca = (Attribute) f.get(jrip);
-		String defaultRule = jrip.getRuleset().stream().map(r -> (JRip.RipperRule) r).filter(r -> !r.hasAntds()).map(r -> r.toString(ca)).findFirst().orElse(null);
+		final Attribute ca = (Attribute) f.get(jrip);
+		final String defaultRule = jrip.getRuleset().stream()
+				                           .map(r -> (JRip.RipperRule) r)
+				                           .filter(r -> !r.hasAntds())
+				                           .map(r -> r.toString(ca))
+				                           .findFirst().orElse(null);
 		if (defaultRule != null) {
-			double[] simStats = jrip.getRuleStats(1).getSimpleStats(0);
+			final double[] simStats = jrip.getRuleStats(1).getSimpleStats(0);
 			return defaultRule + " (" + simStats[0] + "/" + simStats[4] + ")";
 		} else {
 			return "-";
 		}
 	}
 
-	private static String getClassCounts(MyConjunctiveRule rule) {
-		String[] split = rule.toString().split("\n")[4].split("=");
-		return split[split.length-1]+"=1";
+	private static String getClassCounts(final MyConjunctiveRule rule) {
+		final String[] split = rule.toString().split("\n")[4].split("=");
+		return split[split.length - 1] + "=1";
 	}
 
-	private static String getClassCounts(JRip jrip) throws NoSuchFieldException, IllegalAccessException {
-		Field f = jrip.getClass().getDeclaredField("m_Class");
+	private static String getClassCounts(final JRip jrip) throws NoSuchFieldException, IllegalAccessException {
+		final Field f = jrip.getClass().getDeclaredField("m_Class");
 		f.setAccessible(true);
-		Attribute ca = (Attribute) f.get(jrip);
-		List<String> classes = jrip.getRuleset().stream().map(r -> (JRip.RipperRule) r).map(r -> ca.value((int) r.getConsequent())).collect(Collectors.toList());
-		String classCounts = new HashSet<>(classes).stream().map(s -> s + "=" + Collections.frequency(classes, s)).collect(Collectors.joining(", "));
-		return classCounts;
+		final Attribute ca = (Attribute) f.get(jrip);
+		final List<String> classes = jrip.getRuleset().stream().map(r -> (JRip.RipperRule) r).map(r -> ca.value((int) r.getConsequent())).collect(Collectors.toList());
+		return new HashSet<>(classes).stream().map(s -> s + "=" + Collections.frequency(classes, s)).collect(Collectors.joining(", "));
 	}
 
 	// Perform the Friedman statistics test

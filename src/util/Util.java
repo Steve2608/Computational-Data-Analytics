@@ -46,14 +46,14 @@ public class Util {
 	public static Set<String> getFileNames(final String dir) {
 		return Arrays.stream(
 				Objects.requireNonNull(Path.of(dir)
-						.toFile()
-						.listFiles())
+						                       .toFile()
+						                       .listFiles())
 		).map(File::getAbsolutePath)
-				.filter(fileName -> fileName.endsWith(".arff"))
-				.collect(Collectors.toSet());
+				       .filter(fileName -> fileName.endsWith(".arff"))
+				       .collect(Collectors.toSet());
 	}
 
-	// WEKEA - WHY YOU NOT PROVIDE THIS!!!!
+	// WEKA - WHY YOU NOT PROVIDE THIS!!!!
 	public static class MyConjunctiveRule extends ConjunctiveRule {
 		public int size() {
 			return m_Antds.size();
@@ -81,14 +81,6 @@ public class Util {
 
 	public static Evaluation cvModel(final Classifier clf, final Instances data) throws Exception {
 		return cvModel(clf, data, 10);
-	}
-
-	public static J48 getJ48(final Instances data, final int minNumObj, final float confidenceFactor) throws Exception {
-		final J48 tree = new J48();
-		tree.setMinNumObj(minNumObj);
-		tree.setConfidenceFactor(confidenceFactor);
-		tree.buildClassifier(data);
-		return tree;
 	}
 
 	public static J48 getJ48(final Instances data) throws Exception {

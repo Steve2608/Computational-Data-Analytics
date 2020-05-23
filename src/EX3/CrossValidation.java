@@ -19,7 +19,7 @@ public class CrossValidation {
 	private static final long SEED = 11L;
 	private static final int N_DATA_SETS = 5;
 	private static final String HEADER = "###########################################################";
-	private static final String logfile = "logtest";
+	private static final String LOGFILE = "logtest";
 
 	private CrossValidation() {
 	}
@@ -37,7 +37,7 @@ public class CrossValidation {
 
 	}
 
-	private static HashMap<String, List<Double>> evaluate(List<Instances> datasets, boolean switchSets) throws Exception {
+	private static HashMap<String, List<Double>> evaluate(final List<Instances> datasets, final boolean switchSets) throws Exception {
 		final StringBuilder sb = new StringBuilder(String.format("%-45s %15s %15s %15s %15s %15s %15s %15s %15s\n",
 				"Dataset", "1x5 CV", "1x10 CV", "1x20 CV", "LOOCV", "Self", "10x10 CV", "5x2 CV", "Validation"));
 
@@ -81,7 +81,7 @@ public class CrossValidation {
 		System.out.println(sb.toString());
 
 		System.out.println(HEADER);
-		Files.writeString(Paths.get(logfile + "_switched_" + switchSets + ".txt"), sb.toString());
+		Files.writeString(Paths.get(LOGFILE + "_switched_" + switchSets + ".txt"), sb.toString());
 		return resultMap;
 	}
 
@@ -94,8 +94,8 @@ public class CrossValidation {
 				return null;
 			}
 		}).sorted(Comparator.comparingInt((Instances inst) -> Objects.requireNonNull(inst).size()).reversed())
-				.limit(nSets)
-				.collect(Collectors.toList());
+				       .limit(nSets)
+				       .collect(Collectors.toList());
 	}
 
 //	private static TTS trainValSplit(final Instances data) throws Exception {
@@ -103,14 +103,14 @@ public class CrossValidation {
 //		return new TTS(sf.getFold(1), sf.getFold(2));
 //	}
 
-	private static TTS trainValSplit(Instances data) throws Exception {
+	private static TTS trainValSplit(final Instances data) throws Exception {
 		StratifiedRemoveFolds strRmvFolds = new StratifiedRemoveFolds();
 		strRmvFolds.setFold(1);
 		strRmvFolds.setNumFolds(2);
 		strRmvFolds.setSeed(0);
 		strRmvFolds.setInvertSelection(false);
 		strRmvFolds.setInputFormat(data);
-		Instances train = StratifiedRemoveFolds.useFilter(data, strRmvFolds);
+		final Instances train = StratifiedRemoveFolds.useFilter(data, strRmvFolds);
 
 		strRmvFolds = new StratifiedRemoveFolds();
 		strRmvFolds.setFold(2);
@@ -118,7 +118,7 @@ public class CrossValidation {
 		strRmvFolds.setSeed(0);
 		strRmvFolds.setInvertSelection(false);
 		strRmvFolds.setInputFormat(data);
-		Instances test = StratifiedRemoveFolds.useFilter(data, strRmvFolds);
+		final Instances test = StratifiedRemoveFolds.useFilter(data, strRmvFolds);
 
 		return new TTS(train, test);
 //		Random rand = new Random(SEED);
