@@ -494,3 +494,11 @@ For the smaller dataset, we have chosen a lower `lowerBoundMinSupport` to even l
 Interestingly, we have also set `minMetric` to `0.75` for both datasets, which actually is "coincidental" since it works well for both datasets; also both datasets only have very few possible values per column (`SUPERMARKET` has only binary columns). 
 
 For high dimensional datasets, where each column has a multitude of values to assume, `minMetric` would have to be reduced accordingly.
+
+### Conclusion
+
+In conclusion, *confidence* is important in order to estimate the certainty of the rules learned by the classifier. Rules with high *confidence*-values can serve as a good first impression of the dataset (especially rules with few assumptions). 
+
+Rules with high *lift*-values are potentially very interesting for human observers. Rules with especially high / low response rates (=*lift*) can (!) provide interesting insights for the whole dataset. 
+
+Optimizing for rules with high *leverage* guarantees a certain minimum support (contrary to optimizing only *confidence* or only *lift*).  
