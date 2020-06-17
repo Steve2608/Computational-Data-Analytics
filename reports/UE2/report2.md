@@ -6,7 +6,7 @@ header-includes:
 	- \usepackage[all]{nowidow}
 ---
 
-# Exercise Part 1 of 3 - KV Computational Data Analytics (351.008)
+# Exercise Part 2 of 3 - KV Computational Data Analytics (351.008)
 Summer term 2020 - Prof. Dr. Johannes Fürnkranz, Florian Beck
 
 Deadline: May 3, 23:59
