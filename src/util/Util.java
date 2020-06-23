@@ -4,6 +4,7 @@ import weka.classifiers.Classifier;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.rules.ConjunctiveRule;
 import weka.classifiers.rules.JRip;
+import weka.classifiers.trees.HoeffdingTree;
 import weka.classifiers.trees.J48;
 import weka.core.Attribute;
 import weka.core.Instances;
@@ -87,6 +88,12 @@ public class Util {
 		final J48 tree = new J48();
 		tree.buildClassifier(data);
 		return tree;
+	}
+
+	public static HoeffdingTree getHoeffdingTree(final Instances data) throws Exception {
+		final HoeffdingTree hoeffdingTree = new HoeffdingTree();
+		hoeffdingTree.buildClassifier(data);
+		return hoeffdingTree;
 	}
 
 	public static J48 getJ48Param(final Instances data) throws Exception {
