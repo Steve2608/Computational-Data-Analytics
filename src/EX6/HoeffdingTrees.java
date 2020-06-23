@@ -4,11 +4,9 @@ import util.Util;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.trees.HoeffdingTree;
 import weka.classifiers.trees.J48;
-import weka.classifiers.trees.ht.HNode;
 import weka.core.Instances;
 import weka.datagenerators.classifiers.classification.RandomRBF;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,7 +16,7 @@ import static util.Util.cvModel;
 
 public class HoeffdingTrees {
 
-	private static final int[] EXAMPLE_SIZES = {10, 100, 250, 500, 1000, 10_000, 50_000, 100_000};//,10_000, 50_000, 100_000};
+	private static final int[] EXAMPLE_SIZES = {10, 100, 250, 500, 1000, 10_000, 50_000, 100_000};
 
 
 	public static void main(String[] args) throws Exception {
@@ -119,31 +117,29 @@ public class HoeffdingTrees {
 		return Arrays.stream(hoeffdingTree.toString().split("\n")).filter(s -> s.contains("adaptive")).count();
 	}
 
-	private static double getSize(final HoeffdingTree hoeffdingTree) {
-		try {
-			Class<? extends HoeffdingTree> cls = hoeffdingTree.getClass();
-			Field m_root = cls.getDeclaredField("m_root");
-			m_root.setAccessible(true);
-			HNode node = (HNode) m_root.get(hoeffdingTree);
-			System.out.println(node);
-			Class<? extends HNode> hNodeCls = node.getClass();
-			Class<HNode> superCls = (Class<HNode>) hNodeCls.getSuperclass();
-			Class<HNode> superSuperCls = (Class<HNode>) superCls.getSuperclass();
-			//Class<HNode> superSuperSuperCls = (Class<HNode>) superSuperCls.getSuperclass();
-//			Class<HNode> superSuperSuperSuperCls = (Class<HNode>) superSuperSuperCls.getSuperclass();
-
-			System.out.println(superCls);
-
-			Field nodeNumFld = superCls.getDeclaredField("m_nodeNum");
-			nodeNumFld.setAccessible(true);
-
-			int size = (int) nodeNumFld.get(node);
-			return size;
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return -1;
-	}
+//	private static double getSize(final HoeffdingTree hoeffdingTree) {
+//		try {
+//			Class<? extends HoeffdingTree> cls = hoeffdingTree.getClass();
+//			Field m_root = cls.getDeclaredField("m_root");
+//			m_root.setAccessible(true);
+//			HNode node = (HNode) m_root.get(hoeffdingTree);
+//			System.out.println(node);
+//			Class<? extends HNode> hNodeCls = node.getClass();
+//			Class<HNode> superCls = (Class<HNode>) hNodeCls.getSuperclass();
+//			Class<HNode> superSuperCls = (Class<HNode>) superCls.getSuperclass();
+//
+//			System.out.println(superCls);
+//
+//			Field nodeNumFld = superCls.getDeclaredField("m_nodeNum");
+//			nodeNumFld.setAccessible(true);
+//
+//			int size = (int) nodeNumFld.get(node);
+//			return size;
+//		} catch (NoSuchFieldException | IllegalAccessException e) {
+//			e.printStackTrace();
+//		}
+//		return -1;
+//	}
 
 	private static final class Timer {
 
