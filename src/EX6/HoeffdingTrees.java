@@ -19,12 +19,12 @@ public class HoeffdingTrees {
 	private static final int[] EXAMPLE_SIZES = {10, 100, 250, 500, 1000, 10_000, 50_000, 100_000};
 
 
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		final ArrayList<HashMap<String, Double>> testResults = new ArrayList<>(EXAMPLE_SIZES.length);
 		final RandomRBF randomGenerator = new RandomRBF();
 
 		System.out.println("___STARTING___");
-		for (int numExamples : EXAMPLE_SIZES) {
+		for (final int numExamples : EXAMPLE_SIZES) {
 
 			final HashMap<String, Double> results = new HashMap<>();
 			results.put("N_Samples", (double) numExamples);
@@ -72,13 +72,13 @@ public class HoeffdingTrees {
 				System.out.println("Number of leaves: " + j48.measureNumLeaves());
 				System.out.println("Accuracy (10-Fold):" + j48Eval.pctCorrect());
 				System.out.println("Time to fit: " + j48Timer.getDiffString());
-				System.out.println(j48.toString());
+				System.out.println(j48);
 
 				System.out.println("________Hoeffding________");
 				System.out.println("Number of leaves: " + getNumLeaves(hoeffdingTree));
 				System.out.println("Accuracy (10-Fold):" + hoeffdingEval.pctCorrect());
 				System.out.println("Time to fit: " + hoeffdingTimer.getDiffString());
-				System.out.println(hoeffdingTree.toString());
+				System.out.println(hoeffdingTree);
 
 				testResults.add(results);
 			}
@@ -86,7 +86,7 @@ public class HoeffdingTrees {
 		makeReport(testResults);
 	}
 
-	private static void makeReport(ArrayList<HashMap<String, Double>> testResults) {
+	private static void makeReport(final ArrayList<HashMap<String, Double>> testResults) {
 		final StringBuilder sb = new StringBuilder(
 				String.format("| %-20s | %-20s | %-20s | %-20s | %-20s | %-20s | %-20s|\n", "N_Samples",
 						"J48_Acc (%)", "Hoeffding_Acc (%)", "J48_N_Leaves", "Hoeffding_N_Leaves", "J48_Time (s)",
@@ -99,8 +99,7 @@ public class HoeffdingTrees {
 						map.get("J48_Acc"), map.get("Hoeffding_Acc"), (int) (double) map.get("J48_N_Leaves"), (int) (double) map.get("Hoeffding_N_Leaves"),
 						map.get("J48_Time"), map.get("Hoeffding_Time")))
 		);
-		System.out.println(sb.toString());
-
+		System.out.println(sb);
 	}
 
 	private static void printj48TreeStats(final J48 tree, final Evaluation eval) {
@@ -110,7 +109,7 @@ public class HoeffdingTrees {
 	}
 
 	private static double getNumNodes(final HoeffdingTree hoeffdingTree) {
-		return hoeffdingTree.toString().split("\n").length - 1;
+		return hoeffdingTree.toString().split("\n").length - 1.0;
 	}
 
 	private static double getNumLeaves(final HoeffdingTree hoeffdingTree) {
