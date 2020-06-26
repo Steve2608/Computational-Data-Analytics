@@ -18,52 +18,17 @@ public class DistanceMethods {
 	private static final int N_CLASSES = 10;
 	private static final int N_SAMPLES = 25_000;
 	private static final int SEED = 872_442_345;
-	private static final int MAX_NEIGHBORS = 100;
+	private static final int MAX_NEIGHBORS = 50;
+
+	private static final boolean ALL_DISTANCE_WEIGHTINGS = true;
 
 	public static void main(final String[] args) throws Exception {
-		printSection("Compare the classification results and the execution times with " +
-				             "LinearNNSearch, KDTree and BallTree as nearestNeighbourSearchAlgorithm");
-		final ArrayList<EvaluationTuple> times = new ArrayList<>(3);
-		times.add(evaluateNNAlgorithm(new IBk(), generateExamples(), new LinearNNSearch()));
-		times.add(evaluateNNAlgorithm(new IBk(), generateExamples(), new KDTree()));
-		times.add(evaluateNNAlgorithm(new IBk(), generateExamples(), new BallTree()));
+		final List<EvaluationTuple> times = compareExecutionTimes();
+		final List<EvaluationTuple> accuracies = compareAccuracies(times);
+		compareBest3(accuracies);
+	}
 
-		printSection("For the fastest search algorithm in the previous task, " +
-				             "compare the accuracies for different numbers of nearest neighbors " +
-				             "(in Weka: -K (KNN))");
-		final NearestNeighbourSearch fastest = times
-				                                       .stream()
-				                                       .min(Comparator.comparingLong(EvaluationTuple::getExecutionTime))
-				                                       .orElseThrow().getAlgorithm();
-		final ArrayList<EvaluationTuple> accuracies = new ArrayList<>(MAX_NEIGHBORS - 1);
-
-		// used to plot accuracies
-		final List<Double> noWeightingAccs = new ArrayList<>(MAX_NEIGHBORS - 1);
-		final List<Double> inverseWeightingAccs = new ArrayList<>(MAX_NEIGHBORS - 1);
-		for (int neighbors = 1; neighbors < MAX_NEIGHBORS; neighbors++) {
-			final EvaluationTuple noWeighting = evaluateNNAlgorithm(
-					new IBk(neighbors),
-					generateExamples(),
-					fastest.getClass().getDeclaredConstructor().newInstance()
-			);
-
-			final IBk iBk = new IBk();
-			// set distance metric to inverted distance
-			iBk.setOptions(String.format("-I -K %d", neighbors).split(" "));
-			final EvaluationTuple inverseWeighting = evaluateNNAlgorithm(
-					new IBk(neighbors),
-					generateExamples(),
-					fastest.getClass().getDeclaredConstructor().newInstance()
-			);
-			accuracies.add(noWeighting);
-
-			noWeightingAccs.add(noWeighting.getAccuracy());
-			inverseWeightingAccs.add(inverseWeighting.getAccuracy());
-		}
-		// used to plot accuracies
-		System.out.println(noWeightingAccs);
-		System.out.println(inverseWeightingAccs);
-
+	private static void compareBest3(final List<EvaluationTuple> accuracies) throws Exception {
 		printSection("For the best three values for k, does a distance weight method further improve the accuracy?");
 		final List<EvaluationTuple> mostAccurate = accuracies
 				                                           .stream()
@@ -71,22 +36,104 @@ public class DistanceMethods {
 				                                           .limit(3)
 				                                           .collect(Collectors.toList());
 		for (final EvaluationTuple evaluationTuple : mostAccurate) {
-			final IBk iBk = new IBk();
-			// set distance metric to inverted distance
-			iBk.setOptions(String.format("-I -K %d", evaluationTuple.getK()).split(" "));
-			evaluateNNAlgorithm(
-					iBk,
-					generateExamples(),
-					evaluationTuple.algorithm.getClass().getDeclaredConstructor().newInstance()
-			);
-
 			// no distance weighting
 			evaluateNNAlgorithm(
 					new IBk(evaluationTuple.getK()),
 					generateExamples(),
 					evaluationTuple.algorithm.getClass().getDeclaredConstructor().newInstance()
 			);
+
+			final IBk iBKinverse = new IBk();
+			// set distance metric to inverted distance
+			iBKinverse.setOptions(String.format("-I -K %d", evaluationTuple.getK()).split(" "));
+			evaluateNNAlgorithm(
+					iBKinverse,
+					generateExamples(),
+					evaluationTuple.algorithm.getClass().getDeclaredConstructor().newInstance()
+			);
+
+			final IBk iBKsimilarity = new IBk();
+			// set distance metric to similar
+			iBKsimilarity.setOptions(String.format("-F -K %d", evaluationTuple.getK()).split(" "));
+			evaluateNNAlgorithm(
+					iBKsimilarity,
+					generateExamples(),
+					evaluationTuple.algorithm.getClass().getDeclaredConstructor().newInstance()
+			);
 		}
+	}
+
+	private static List<EvaluationTuple> compareAccuracies(final List<EvaluationTuple> times) throws Exception {
+		printSection("For the fastest search algorithm in the previous task, " +
+				             "compare the accuracies for different numbers of nearest neighbors " +
+				             "(in Weka: -K (KNN))");
+		final NearestNeighbourSearch fastest = times
+				                                       .stream()
+				                                       .min(Comparator.comparingLong(EvaluationTuple::getExecutionTime))
+				                                       .orElseThrow().getAlgorithm();
+		final List<EvaluationTuple> accuracies = new ArrayList<>(MAX_NEIGHBORS);
+
+		// used to plot accuracies
+		final List<Double> noWeightingAccs = new ArrayList<>(MAX_NEIGHBORS);
+		for (int neighbors = 1; neighbors <= MAX_NEIGHBORS; neighbors++) {
+			final EvaluationTuple noWeighting = evaluateNNAlgorithm(
+					new IBk(neighbors),
+					generateExamples(),
+					fastest.getClass().getDeclaredConstructor().newInstance()
+			);
+			accuracies.add(noWeighting);
+			noWeightingAccs.add(noWeighting.getAccuracy());
+		}
+		System.out.println("Accuracies - WEIGHT_NONE");
+		System.out.println(noWeightingAccs);
+
+		if (ALL_DISTANCE_WEIGHTINGS) {
+			final List<Double> inverseWeightingAccs = new ArrayList<>(MAX_NEIGHBORS);
+			final List<Double> similarityWeightingAccs = new ArrayList<>(MAX_NEIGHBORS);
+
+			for (int neighbors = 1; neighbors <= MAX_NEIGHBORS; neighbors++) {
+				final IBk iBKinverse = new IBk();
+				// set distance metric to inverted distance
+				iBKinverse.setOptions(String.format("-I -K %d", neighbors).split(" "));
+				final EvaluationTuple inverseWeighting = evaluateNNAlgorithm(
+						iBKinverse,
+						generateExamples(),
+						fastest.getClass().getDeclaredConstructor().newInstance()
+				);
+
+				final IBk iBKsimilarity = new IBk();
+				// set distance metric to inverted distance
+				iBKsimilarity.setOptions(String.format("-F -K %d", neighbors).split(" "));
+				final EvaluationTuple similarityWeighting = evaluateNNAlgorithm(
+						iBKsimilarity,
+						generateExamples(),
+						fastest.getClass().getDeclaredConstructor().newInstance()
+				);
+
+				inverseWeightingAccs.add(inverseWeighting.getAccuracy());
+				similarityWeightingAccs.add(similarityWeighting.getAccuracy());
+			}
+
+			// reprint to keep results together
+			System.out.println("Accuracies - WEIGHT_NONE");
+			System.out.println(noWeightingAccs);
+			System.out.println("Accuracies - WEIGHT_INVERSE");
+			System.out.println(inverseWeightingAccs);
+			System.out.println("Accuracies - WEIGHT_SIMILARITY");
+			System.out.println(similarityWeightingAccs);
+		}
+
+		return accuracies;
+	}
+
+	private static List<EvaluationTuple> compareExecutionTimes() throws Exception {
+		printSection("Compare the classification results and the execution times with " +
+				             "LinearNNSearch, KDTree and BallTree as nearestNeighbourSearchAlgorithm");
+		final List<EvaluationTuple> times = new ArrayList<>(3);
+		times.add(evaluateNNAlgorithm(new IBk(), generateExamples(), new LinearNNSearch()));
+		times.add(evaluateNNAlgorithm(new IBk(), generateExamples(), new KDTree()));
+		times.add(evaluateNNAlgorithm(new IBk(), generateExamples(), new BallTree()));
+		return times;
 	}
 
 	private static EvaluationTuple evaluateNNAlgorithm(final IBk nnSearch, final Instances data,
@@ -136,7 +183,7 @@ public class DistanceMethods {
 			case "2":
 				distanceWeighting = "WEIGHT_INVERSE";
 				break;
-			case "3":
+			case "4": // ?!
 				distanceWeighting = "WEIGHT_SIMILARITY";
 				break;
 			default:
