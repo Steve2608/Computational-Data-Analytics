@@ -64,19 +64,45 @@ Thus, one could argue that the _Hoeffding Tree_ trades some accuracy for better 
    main tab. Choose the generator RandomRBF and set -c (numClasses) to 10 and -n (numExamples)
    to 25,000.*
 
-> *1. Compare the classification results and the execution times with LinearNNSearch, KDTree
-      and BallTree as nearestNeighbourSearchAlgorithm.*
+> *1. Compare the classification results and the execution times with `LinearNNSearch`, `KDTree`
+      and `BallTree` as nearestNeighbourSearchAlgorithm.*
 
-TODO
+|           | LinearNNSearch | KDTree | BallTree |
+|-----------|----------------|--------|----------|
+| time (ms) | 20,457         | 2,578  | 12,593   |
+| accuracy  | 91.2           | 91.2   | 91.2     |
 
-> *1. In this special case, when a minimal support of just one instance is needed, how do you interpret these sets with minimum and maximum *k* and their size?*
+Since the default Constructor of the `IBk` uses `k=1` supports. Thus, the accuracy will stay constant over all different kinds of algorithms. 
 
-TODO
+For `k=1` the only thing that matter is the time to fit / evaluate the classifier - for this and the following experiments we used a 10-CV. 
 
 > *2. For the fastest search algorithm in the previous task, compare the accuracies for different
-       numbers of nearest neighbors (in Weka: -K (KNN)). For the best three values for k, does a
+       numbers of nearest neighbors (in Weka: -K (KNN)).*
+
+From the table above, we can see that `KDTree` is the fastest algorithm by a factor of roughly `5` and `8` respectively.
+To exhaustively analyse the performance of the `KDTree` algorithm, we plot the accuracy for all possible values of `k` in `[1, 50]`.
+
+![Accuracies](figs/accuracies.png)
+
+> *2. For the best three values for k, does a
        distance weight method further improve the accuracy?*
 
+| k=16     | no distance weighting | inverse distance weighting | similarity distance weighting |
+|----------|-----------------------|----------------------------|-------------------------------|
+| accuracy | 92.608                | 92.632                     | **92.64**                     |
+
+| k=12     | no distance weighting | inverse distance weighting | similarity distance weighting |
+|----------|-----------------------|----------------------------|-------------------------------|
+| accuracy | 92.596                | 92.636                     | **92.64**                     |
+
+| k=15     | no distance weighting | inverse distance weighting | similarity distance weighting |
+|----------|-----------------------|----------------------------|-------------------------------|
+| accuracy | 92.592                | **92.604**                 | 92.596                        |
+
+From this small table, we can see that using a distance weighting does slightly increase the performance of the classifier.
+Other than minor fluctuation, however, the exact choice between *inverse distance weighting* and *similarity distance weighting* does not matter. 
+
+For a full list of results see [gist.github.com](https://gist.github.com/Steve2608/9e56e1b5a3fb7b4b8f5112e9b59e9017).
 
 ### Clustering (2 P.)
 
