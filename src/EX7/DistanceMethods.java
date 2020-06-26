@@ -36,15 +36,33 @@ public class DistanceMethods {
 				                                       .min(Comparator.comparingLong(EvaluationTuple::getExecutionTime))
 				                                       .orElseThrow().getAlgorithm();
 		final ArrayList<EvaluationTuple> accuracies = new ArrayList<>(MAX_NEIGHBORS - 1);
+
+		// used to plot accuracies
+		final List<Double> noWeightingAccs = new ArrayList<>(MAX_NEIGHBORS - 1);
+		final List<Double> inverseWeightingAccs = new ArrayList<>(MAX_NEIGHBORS - 1);
 		for (int neighbors = 1; neighbors < MAX_NEIGHBORS; neighbors++) {
-			accuracies.add(
-					evaluateNNAlgorithm(
-							new IBk(neighbors),
-							generateExamples(),
-							fastest.getClass().getDeclaredConstructor().newInstance()
-					)
+			final EvaluationTuple noWeighting = evaluateNNAlgorithm(
+					new IBk(neighbors),
+					generateExamples(),
+					fastest.getClass().getDeclaredConstructor().newInstance()
 			);
+
+			final IBk iBk = new IBk();
+			// set distance metric to inverted distance
+			iBk.setOptions(String.format("-I -K %d", neighbors).split(" "));
+			final EvaluationTuple inverseWeighting = evaluateNNAlgorithm(
+					new IBk(neighbors),
+					generateExamples(),
+					fastest.getClass().getDeclaredConstructor().newInstance()
+			);
+			accuracies.add(noWeighting);
+
+			noWeightingAccs.add(noWeighting.getAccuracy());
+			inverseWeightingAccs.add(inverseWeighting.getAccuracy());
 		}
+		// used to plot accuracies
+		System.out.println(noWeightingAccs);
+		System.out.println(inverseWeightingAccs);
 
 		printSection("For the best three values for k, does a distance weight method further improve the accuracy?");
 		final List<EvaluationTuple> mostAccurate = accuracies
