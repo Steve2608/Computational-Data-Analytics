@@ -29,7 +29,8 @@ Deadline: July 12, 23:59
    uses an incremental approach suitable for stream mining. Create a new random dataset by choosing Generate in the main tab. Choose the generator RandomRBF and run it with the standard settings. Compare the classification accuracies, and the time taken to build model of J48 and HoeffdingTree on the generated dataset. Repeat the classification for more generated datasets of bigger size by increasing -n (numExamples) (for example,100, 250, 500, 1,000, ..., 100,000). For the three biggest datasets, also compare the size of the trees, and the total execution time (in seconds; you can find the start and end time in the log). What conclusions about the classifiers can be drawn from the performances?*
 
 The table below comprises the overall results, obtained during the requested tests.  
-A full example console output can be found in _'src/EX6/example_output_log.txt'_, as it was simply far too big for including it in this report. 
+
+A full example console output can be found in [example_output_log.txt](https://raw.githubusercontent.com/Steve2608/Computational-Data-Analytics/master/src/EX6/example_output_log), as it was simply far too big for including it in this report. 
 
 | N_Samples            | J48_Acc (%)          | Hoeffding_Acc (%)    | J48_N_Leaves         | Hoeffding_N_Leaves   | J48_Time (s)         | Hoeffding_Time (s)  |
 |----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|---------------------|
