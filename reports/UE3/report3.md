@@ -138,7 +138,7 @@ By visual inspection, we argue that K=15 is an appropriate value, as the cluster
 | K=15, Seed=10 -> E=39.77 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.1.PNG?raw=true"> | K=15, Seed=20 -> E=40.97 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.2.PNG?raw=true"> | 
 | K=15, Seed=30 -> E=40.27 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.3.PNG?raw=true"> | K=15, Seed=40 -> E=38.12 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.4.PNG?raw=true"> |
 
-Different seeds can change the cluster assignments do not change the "within cluster sum of squared errors" (E) much, except for the last example, where Kreta is divided, which might be considered unsatisfactory from a subjective visual standpoint, but decreases the error. Also in other areas the location and size of the clusters changes quite a lot, as can be seen in the visualizations.
+Different seeds do not change the "within cluster sum of squared errors" (E) much, except for the last example, where Kreta is divided, which might be considered unsatisfactory from a subjective visual standpoint, but decreases the error. Also in other areas the location and size of the clusters changes quite a lot, as can be seen in the visualizations.
 
 > *2. Now use DBSCAN to cluster the cities. If you use the standard settings of DBSCAN you will
       just get a single cluster. Adjust the parameters -E (epsilon) and -M (minPoints) to get a
