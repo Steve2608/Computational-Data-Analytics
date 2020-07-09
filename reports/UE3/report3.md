@@ -122,7 +122,23 @@ For a full list of results see [gist.github.com](https://gist.github.com/Steve26
       values for k, compare the results and find an appropriate value for k. For this k, apply
       the cluster with three more different seeds. Does the result change? If yes, how much?*
 >
-TODO
+
+### Visualization of Cluster Assignments for different K
+| | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
+| K=2 -> E=441.32 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans2.PNG?raw=true"> |  K=3 -> E=274.38 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans3.PNG?raw=true"> | K=4 -> E=172.80 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans4.PNG?raw=true"> |
+| K=5 -> E=132.65 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans5.PNG?raw=true"> |  K=10 -> E=59.85 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans10.PNG?raw=true"> | K=15 -> E=39.77 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.1.PNG?raw=true"> |
+| K=20 -> E=29.53 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans20.PNG?raw=true"> |  K=25 -> E=23.97 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans25.PNG?raw=true"> | K=50 -> E=11.84 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans50.PNG?raw=true"> |
+
+By visual inspection, we argue that K=15 is an appropriate value, as the cluster assignment shows different regions relatively seperated like mainland Greece, the Peloponnese peninsula, Kreta and the other smaller Islands. A higher value of K however does not really help to seperate this main regions any better, but just seperates them into more sub-clusters. Of course, this visual inspection of cluster assignment is extremely subjective and judging a "good" clustering would depend on the actual use case. As expected, the "within cluster sum of squared errors" (E) decreases for higher values of K.
+
+### K = 15, for different seeds
+| | |
+|:-------------------------:|:-------------------------:|
+| K=15, Seed=10 -> E=39.77 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.1.PNG?raw=true"> | K=15, Seed=20 -> E=40.97 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.2.PNG?raw=true"> | 
+| K=15, Seed=30 -> E=40.27 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.3.PNG?raw=true"> | K=15, Seed=40 -> E=38.12 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.4.PNG?raw=true"> |
+
+Different seeds can change the cluster assignments do not change the "within cluster sum of squared errors" (E) much, except for the last example, where Kreta is divided, which might be considered unsatisfactory from a subjective visual standpoint, but decreases the error. Also in other areas the location and size of the clusters changes quite a lot, as can be seen in the visualizations.
 
 > *2. Now use DBSCAN to cluster the cities. If you use the standard settings of DBSCAN you will
       just get a single cluster. Adjust the parameters -E (epsilon) and -M (minPoints) to get a
