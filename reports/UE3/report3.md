@@ -147,4 +147,27 @@ Different seeds do not change the "within cluster sum of squared errors" (E) muc
       your opinion? Compute for the "best" number of clusters the outcome of SimpleKMeans
       and compare the results.*
 
-TODO
+### Finding the right DBSCAN Parameters
+| epsilon | min points | # clusters | # unclustered |   |
+| ------- | --------- | ---------- | -------------- | - |
+| 0.9  | 6 | 1 | 0 | default settings |
+| 0.07 | 6 | 2 | 1 | first real clustering with e <= 0.07 |
+| 0.06 | 6 | 5 | 2 ||
+| 0.05 | 6 | 8 | 4 ||
+| 0.04 | 6 | 10 | 8 ||
+| 0.02 | 6 | 24 | 36 ||
+| 0.015 | 6 | 31 | 46 ||
+| 0.015 | 3 | 36 | 15 | most appropriate visual result |
+| 0.01 | 6 | 42 | 151 ||
+| 0.005 | 6 | 195 | 3562 ||
+
+| | |
+|:-------------------------:|:-------------------------:|
+| e=0.07, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.07_n6.PNG?raw=true"> | e=0.06, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.06_n6.PNG?raw=true"> | 
+| e=0.05, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.05_n6.PNG?raw=true"> | e=0.04, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.04_n6.PNG?raw=true"> | 
+| e=0.03, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.03_n6.PNG?raw=true"> | e=0.02, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.02_n6.PNG?raw=true"> |
+| e=0.015, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.015_n6.PNG?raw=true"> | e=0.015, m=3 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.015_n3.PNG?raw=true"> |
+| e=0.01, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.01_n6.PNG?raw=true"> | e=0.005, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.005_n6.PNG?raw=true"> | 
+
+The most appropriate visual result can be achieed with eps=0.015. This results in a clear seperation of mainland Greece including the Peloponnese peninsula and nearly all island groups as seperate clusters. As there are some island (or island groups) which contain only about a few cities, we also set the 'min points' to 3, to create more small clusters instead of outliers.  
+If we want the Peloponnese peninsula to be a seperate cluster, we would have to set eps even smaller (e.g. 0.005) which results in a lot of small clusters and over 36% outliers.
