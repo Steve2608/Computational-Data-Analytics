@@ -161,6 +161,8 @@ Different seeds do not change the "within cluster sum of squared errors" (E) muc
 | 0.01 | 6 | 42 | 151 ||
 | 0.005 | 6 | 195 | 3562 ||
 
+With smaller epsilon values we get more clusters and also more outliers. However, with a smaller number of min points we can reduce the number of outliers a lot. With the most appropriate settings of eps=0.015 and m=3 we still have only very few outliers (~0.15%).
+
 | | |
 |:-------------------------:|:-------------------------:|
 | e=0.07, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.07_n6.PNG?raw=true"> | e=0.06, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.06_n6.PNG?raw=true"> | 
