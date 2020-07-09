@@ -171,3 +171,12 @@ Different seeds do not change the "within cluster sum of squared errors" (E) muc
 
 The most appropriate visual result can be achieed with eps=0.015. This results in a clear seperation of mainland Greece including the Peloponnese peninsula and nearly all island groups as seperate clusters. As there are some island (or island groups) which contain only about a few cities, we also set the 'min points' to 3, to create more small clusters instead of outliers.  
 If we want the Peloponnese peninsula to be a seperate cluster, we would have to set eps even smaller (e.g. 0.005) which results in a lot of small clusters and over 36% outliers.
+
+### Comparision with KMEANS
+
+| | |
+|:-------------------------:|:-------------------------:|
+| DBSCAN e=0.015, m=3 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.015_n3.PNG?raw=true"> | KMEANS k=36 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans36.PNG?raw=true"> | 
+
+If we compare the "best" DBSCAN with KMEANS using the same number of clusters ignoring outliers (=36), we can see that with KMEANS the mainland is devided in multiple small parts, while all the islands are grouped to only about 3 big clusters. With DBSCAN, the mainland is one big cluster with the islands being many seperate small clusters.  
+This shows how DBSCAN can handle arbitrary complex decision (or cluster) boundaries, while KMEANS is limited to elipsoid clusters and can't handle the complex geographic shape of a country. However, with DBSCAN the epsilon parameter also has to be carefully tuned for an appropriate result, as it is the case for number k of clusters with KMEANS.
