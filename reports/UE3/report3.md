@@ -124,19 +124,25 @@ For a full list of results see [gist.github.com](https://gist.github.com/Steve26
 >
 
 ### Visualization of Cluster Assignments for different K
+
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
-| K=2 -> E=441.32 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans2.PNG?raw=true"> |  K=3 -> E=274.38 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans3.PNG?raw=true"> | K=4 -> E=172.80 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans4.PNG?raw=true"> |
-| K=5 -> E=132.65 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans5.PNG?raw=true"> |  K=10 -> E=59.85 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans10.PNG?raw=true"> | K=15 -> E=39.77 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.1.PNG?raw=true"> |
-| K=20 -> E=29.53 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans20.PNG?raw=true"> |  K=25 -> E=23.97 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans25.PNG?raw=true"> | K=50 -> E=11.84 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans50.PNG?raw=true"> |
+| K=2 -> E=441.32  |  K=3 -> E=274.38  | K=4 -> E=172.80  |
+| ![](figs/kmeans2.PNG){ width=200px } | ![](figs/kmeans3.PNG){ width=200px } | ![](figs/kmeans4.PNG){ width=200px } |
+| K=5 -> E=132.65  |  K=10 -> E=59.85 | K=15 -> E=39.77 |
+| ![](figs/kmeans5.PNG){ width=200px } | ![](figs/kmeans10.PNG){ width=200px } | ![](figs/kmeans15.1.PNG){ width=200px } |
+| K=20 -> E=29.53   |  K=25 -> E=23.97  | K=50 -> E=11.84 |
+| ![](figs/kmeans20.PNG){ width=200px } | ![](figs/kmeans25.PNG){ width=200px } | ![](figs/kmeans50.PNG){ width=200px } |
 
 By visual inspection, we argue that K=15 is an appropriate value, as the cluster assignment shows different regions relatively seperated like mainland Greece, the Peloponnese peninsula, Kreta and the other smaller Islands. A higher value of K however does not really help to seperate this main regions any better, but just seperates them into more sub-clusters. Of course, this visual inspection of cluster assignment is extremely subjective and judging a "good" clustering would depend on the actual use case. As expected, the "within cluster sum of squared errors" (E) decreases for higher values of K.
 
 ### K = 15, for different seeds
 | | |
 |:-------------------------:|:-------------------------:|
-| K=15, Seed=10 -> E=39.77 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.1.PNG?raw=true"> | K=15, Seed=20 -> E=40.97 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.2.PNG?raw=true"> | 
-| K=15, Seed=30 -> E=40.27 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.3.PNG?raw=true"> | K=15, Seed=40 -> E=38.12 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans15.4.PNG?raw=true"> |
+| K=15, Seed=10 -> E=39.77  | K=15, Seed=20 -> E=40.97  | 
+| ![](figs/kmeans15.1.PNG){ width=300px } | ![](figs/kmeans15.2.PNG){ width=300px } | 
+| K=15, Seed=30 -> E=40.27  | K=15, Seed=40 -> E=38.12 |
+| ![](figs/kmeans15.3.PNG){ width=300px } | ![](figs/kmeans15.4.PNG){ width=300px } |
 
 Different seeds do not change the "within cluster sum of squared errors" (E) much, except for the last example, where Kreta is divided, which might be considered unsatisfactory from a subjective visual standpoint, but decreases the error. Also in other areas the location and size of the clusters changes quite a lot, as can be seen in the visualizations.
 
@@ -163,13 +169,18 @@ Different seeds do not change the "within cluster sum of squared errors" (E) muc
 
 With smaller epsilon values we get more clusters and also more outliers. However, with a smaller number of min points we can reduce the number of outliers a lot. With the most appropriate settings of eps=0.015 and m=3 we still have only very few outliers (~0.15%).
 
-| | |
-|:-------------------------:|:-------------------------:|
-| e=0.07, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.07_n6.PNG?raw=true"> | e=0.06, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.06_n6.PNG?raw=true"> | 
-| e=0.05, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.05_n6.PNG?raw=true"> | e=0.04, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.04_n6.PNG?raw=true"> | 
-| e=0.03, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.03_n6.PNG?raw=true"> | e=0.02, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.02_n6.PNG?raw=true"> |
-| e=0.015, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.015_n6.PNG?raw=true"> | e=0.015, m=3 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.015_n3.PNG?raw=true"> |
-| e=0.01, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.01_n6.PNG?raw=true"> | e=0.005, m=6 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.005_n6.PNG?raw=true"> | 
+|                                               |                                               |
+|:---------------------------------------------:|:---------------------------------------------:|
+| e=0.07, m=6                                   | e=0.06, m=6                                   | 
+| ![](figs/dbscan_e0.07_n6.PNG){ width=300px }  | ![](figs/dbscan_e0.06_n6.PNG){ width=300px }  | 
+| e=0.05, m=6                                   | e=0.04, m=6                                   | 
+|  ![](figs/dbscan_e0.05_n6.PNG){ width=300px } | ![](figs/dbscan_e0.04_n6.PNG){ width=300px }  | 
+| e=0.03, m=6                                   | e=0.02, m=6                                   |
+| ![](figs/dbscan_e0.03_n6.PNG){ width=300px }  | ![](figs/dbscan_e0.02_n6.PNG){ width=300px }  |
+| e=0.015, m=6                                  | e=0.015, m=3                                  |
+| ![](figs/dbscan_e0.015_n6.PNG){ width=300px } | ![](figs/dbscan_e0.015_n3.PNG){ width=300px } |
+| e=0.01, m=6                                   | e=0.005, m=6                                  | 
+| ![](figs/dbscan_e0.01_n6.PNG){ width=300px }  | ![](figs/dbscan_e0.005_n6.PNG){ width=300px } | 
 
 The most appropriate visual result can be achieed with eps=0.015. This results in a clear seperation of mainland Greece including the Peloponnese peninsula and nearly all island groups as seperate clusters. As there are some island (or island groups) which contain only about a few cities, we also set the 'min points' to 3, to create more small clusters instead of outliers.  
 If we want the Peloponnese peninsula to be a seperate cluster, we would have to set eps even smaller (e.g. 0.005) which results in a lot of small clusters and over 36% outliers.
@@ -177,8 +188,9 @@ If we want the Peloponnese peninsula to be a seperate cluster, we would have to 
 ### Comparision with KMEANS
 
 | | |
-|:-------------------------:|:-------------------------:|
-| DBSCAN e=0.015, m=3 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/dbscan_e0.015_n3.PNG?raw=true"> | KMEANS k=36 <img width="1000" src="https://github.com/Steve2608/Computational-Data-Analytics/blob/master/reports/UE3/figs/kmeans36.PNG?raw=true"> | 
+|:-:|:-:|
+| DBSCAN e=0.015, m=3  | KMEANS k=36  | 
+| ![](figs/dbscan_e0.015_n3.PNG){ width=300px } | ![](figs/kmeans36.PNG){ width=300px } | 
 
 If we compare the "best" DBSCAN with KMEANS using the same number of clusters ignoring outliers (=36), we can see that with KMEANS the mainland is devided in multiple small parts, while all the islands are grouped to only about 3 big clusters. With DBSCAN, the mainland is one big cluster with the islands being many seperate small clusters.  
 This shows how DBSCAN can handle arbitrary complex decision (or cluster) boundaries, while KMEANS is limited to elipsoid clusters and can't handle the complex geographic shape of a country. However, with DBSCAN the epsilon parameter also has to be carefully tuned for an appropriate result, as it is the case for number k of clusters with KMEANS.
